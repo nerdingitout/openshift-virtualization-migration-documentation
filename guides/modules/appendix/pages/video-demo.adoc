@@ -1,5 +1,0 @@
-= Video: OpenShift Virtualization Migration Demo
-
-A video showing how the Ansible for OpenShift Virtualization Migration works on RHDP.
-
-video::X1KBHmgWxvg[youtube, width=800, height=450]
