@@ -176,8 +176,147 @@
   <div class="content">
 <article class="doc">
 <h1 class="page">Archive the plan</h1>
+<div id="preamble">
+<div class="sectionbody">
 <div class="paragraph">
-<p>This page is a stub for the v2 navigation preview. Content will follow tester feedback.</p>
+<p>Mark a finished migration plan archived in MTV so its logs and history go away and it cannot be started again. Verify first (<a href="verify-migration.html" class="xref page">Verify the migration</a>). Do not archive a plan you still need to restart or debug.</p>
+</div>
+<div class="paragraph">
+<p>When you are done, the plan is archived in the project where you created it. The migrated VMs stay in <code>target_namespace</code>. Next is <a href="scaling-the-automation.html" class="xref page">Scale the automation</a>.</p>
+</div>
+<div class="paragraph">
+<p>Collection <code>v2</code> has no archive playbook. Archive is an MTV action on the Plan CR that <code>mtv_plans</code> created. Use the OpenShift web console.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="what-archive-does"><a class="anchor" href="#what-archive-does"></a>What archive does</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><strong>Archive Plan</strong> removes the plan&#8217;s logs, history, and migration metadata. After that you can view the plan, duplicate it, or delete it. You cannot edit it or start it again. Archive is irreversible. Duplicate the plan if you need the same VMs and maps as a new run.</p>
+</div>
+<div class="paragraph">
+<p>Archiving does <strong>not</strong> delete:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Migrated VirtualMachines</p>
+</li>
+<li>
+<p>StorageMaps or NetworkMaps from <a href="create-maps.html" class="xref page">Create maps</a></p>
+</li>
+<li>
+<p>Providers from <a href="create-providers.html" class="xref page">Create providers</a></p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p><strong>Delete Plan</strong> is a different action. It permanently removes the Plan CR. You cannot delete a running plan. MTV does not clean temporary importer or conversion resources on delete unless you archive first. Archive, then delete, if you want that cleanup.</p>
+</div>
+<div class="paragraph">
+<p>Maps created by <code>mtv_maps</code> can belong to more than one plan. Deleting an archived plan does not remove those maps.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="prerequisites"><a class="anchor" href="#prerequisites"></a>Prerequisites</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p>The plan is <strong>Succeeded</strong> (or you have accepted <strong>Failed</strong> / <strong>Canceled</strong> and do not need the logs).</p>
+</li>
+<li>
+<p>You are in the project where Plan CRs live (<code>migration_namespace</code>, default <code>openshift-mtv</code>).</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Do not archive while the plan is <strong>Running</strong>, or before cutover on a warm plan.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="archive-in-the-console"><a class="anchor" href="#archive-in-the-console"></a>Archive in the console</h2>
+<div class="sectionbody">
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>In the OpenShift web console: <strong>Migration</strong> → <strong>Plans for virtualization</strong>.</p>
+</li>
+<li>
+<p>Select the project for the plans.</p>
+</li>
+<li>
+<p>Open the options menu beside the plan.</p>
+</li>
+<li>
+<p>Choose <strong>Archive Plan</strong> and confirm.</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>The plan shows as archived. If you used <code>split_plans</code>, archive each Plan CR in the wave.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../guides/rhdp/_images/openshift-mtv-plans.png" alt="MTV Plans">
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>If the project does not appear, select <strong>Show default projects</strong> so names that start with <code>openshift</code> are listed.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>To run a similar wave later: options menu → <strong>Duplicate Plan</strong>, then treat the copy as a new plan (<a href="execute-migration.html" class="xref page">Execute the migration</a>). Do not expect the archived plan to start again.</p>
+</div>
+<div class="paragraph">
+<p>To remove the Plan CR after archive: options menu → <strong>Delete Plan</strong>. Only do this when you do not need the record. VMs are unchanged.</p>
+</div>
+<div class="paragraph">
+<p>MTV plan options: <a href="https://docs.redhat.com/en/documentation/migration_toolkit_for_virtualization/">Migration Toolkit for Virtualization documentation</a>.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="if-archive-is-unavailable"><a class="anchor" href="#if-archive-is-unavailable"></a>If archive is unavailable</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Archive Plan</strong> missing or disabled — the plan is still running, or you lack permission.</p>
+</li>
+<li>
+<p>You still need logs — wait; archive deletes them.</p>
+</li>
+<li>
+<p>You meant to remove VMs — archive does not do that; delete or stop VirtualMachines in <code>target_namespace</code> separately.</p>
+</li>
+<li>
+<p>You need the same wave again — <strong>Duplicate Plan</strong>, not un-archive.</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="when-you-are-done"><a class="anchor" href="#when-you-are-done"></a>When you are done</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The plan is archived (and optionally deleted). Workloads remain on OpenShift Virtualization. Continue to <a href="scaling-the-automation.html" class="xref page">Scale the automation</a> if you are repeating this path across more sources or clusters.</p>
+</div>
+</div>
 </div>
 <nav class="pagination">
   <span class="prev"><a href="verify-migration.html" class="query-params-link">Verify the migration</a></span>
