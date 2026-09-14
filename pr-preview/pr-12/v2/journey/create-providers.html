@@ -3,9 +3,9 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Confirm OpenShift is ready :: Ansible for OpenShift Virtualization Migration Documentation</title>
-    <link rel="prev" href="../home.html">
-    <link rel="next" href="setup-environment.html">
+    <title>Create providers :: Ansible for OpenShift Virtualization Migration Documentation</title>
+    <link rel="prev" href="run-a-migration.html">
+    <link rel="next" href="create-maps.html">
     <meta name="generator" content="Antora 3.1.15">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -47,7 +47,7 @@
   </li>
   <li class="nav-item" data-depth="0">
 <ul class="nav-list">
-  <li class="nav-item is-current-page" data-depth="1">
+  <li class="nav-item" data-depth="1">
     <a class="nav-link" href="confirm-openshift-ready.html">Confirm OpenShift is ready</a>
   </li>
   <li class="nav-item" data-depth="1">
@@ -75,7 +75,7 @@
     <button class="nav-item-toggle"></button>
     <a class="nav-link" href="run-a-migration.html">Run a migration</a>
 <ul class="nav-list">
-  <li class="nav-item" data-depth="2">
+  <li class="nav-item is-current-page" data-depth="2">
     <a class="nav-link" href="create-providers.html">Create providers</a>
   </li>
   <li class="nav-item" data-depth="2">
@@ -228,38 +228,196 @@
 <nav class="breadcrumbs" aria-label="breadcrumbs">
   <ul>
     <li><a href="../index.html">Migration Factory V2</a></li>
-    <li><a href="confirm-openshift-ready.html">Confirm OpenShift is ready</a></li>
+    <li><a href="run-a-migration.html">Run a migration</a></li>
+    <li><a href="create-providers.html">Create providers</a></li>
   </ul>
 </nav>
 </div>
   <div class="content">
 <article class="doc">
-<h1 class="page">Confirm OpenShift is ready</h1>
+<h1 class="page">Create providers</h1>
+<div id="preamble">
+<div class="sectionbody">
 <div class="paragraph">
-<p>Start from a cluster that already exists. These docs do not cover installing or deploying OpenShift. The type of OpenShift environment does not change the path.</p>
+<p>Register the source hypervisor with Migration Toolkit for Virtualization so later steps can map networks and storage and run a wave. Seed must already have succeeded (<a href="seed-aap.html" class="xref page">Seed Migration Factory into AAP</a>).</p>
 </div>
 <div class="paragraph">
-<p>Assume OpenShift Container Platform is installed, with baseline components:</p>
+<p>When you are done, MTV shows a provider with a green check in the <code>openshift-mtv</code> namespace. Next is <a href="create-maps.html" class="xref page">Create maps</a>.</p>
+</div>
+<div class="paragraph">
+<p>You can configure these MTV providers:</p>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p>OpenShift Virtualization</p>
+<p>VMware, using the <a href="https://console.redhat.com/ansible/automation-hub/repo/validated/infra/openshift_virtualization_migration/content/playbook/mtv_provider_vmware.yml/"><code>mtv_provider_vmware</code></a> playbook.</p>
 </li>
 <li>
-<p>Migration Toolkit for Virtualization (MTV)</p>
+<p>Red Hat Virtualization, using the <a href="https://console.redhat.com/ansible/automation-hub/repo/validated/infra/openshift_virtualization_migration/content/playbook/mtv_provider_ovirt.yml/"><code>mtv_provider_ovirt</code></a> playbook.</p>
 </li>
 </ul>
 </div>
 <div class="paragraph">
-<p>A prerequisites role will verify this baseline. If that check fails, fix the cluster before you get AAP ready or seed Migration Factory.</p>
+<p>The playbooks use the <code>mtv_management</code> role. After seed, the same work can run from AAP instead of <code>ansible-navigator</code>.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="prerequisites"><a class="anchor" href="#prerequisites"></a>Prerequisites</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p>Logged in to the cluster over CLI with <code>oc login</code>.</p>
+</li>
+<li>
+<p>The cluster is ready for OpenShift Virtualization Migration (<a href="confirm-openshift-ready.html" class="xref page">Confirm OpenShift is ready</a>).</p>
+</li>
+<li>
+<p>Inventory matches the environment (<a href="configure-inventory.html" class="xref page">Configure inventory for your environment</a>).</p>
+</li>
+</ul>
+</div>
+<div class="sect2">
+<h3 id="required-variables"><a class="anchor" href="#required-variables"></a>Required variables</h3>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>mtv_management_migration_targets (Required)</strong>: details about the VMware or RHV environment.</p>
+</li>
+</ul>
 </div>
 <div class="paragraph">
-<p>This page is a stub for the v2 navigation preview. Content will follow tester feedback.</p>
+<p>The following example configures a VMware provider in a <code>var.yml</code> file:</p>
+</div>
+<div class="listingblock">
+<div class="title">var.yml</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">mtv_management_migration_targets:
+- name: vmware-2w7dj
+  type: vmware
+  host: vcsrs00-vc.infra.demo.redhat.com
+  username: ocpvirt-2w7dj-user1@infra
+  password: &lt;VCENTER-PASSWORD&gt;
+  vddk:
+  image: quay.io/redhat-cop/openshift-virtualization-migration-vddk:latest #this VDDK image is for demo purposes only. Must NOT be distributed externally.
+  username: "{{ container_username }}"
+  password: "{{ container_password }}"
+  sdkEndpoint: /sdk
+  insecureSkipTlsVerify: true
+  mapping:
+    create: true</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The following example configures a RHV provider in a <code>var.yml</code> file:</p>
+</div>
+<div class="listingblock">
+<div class="title">var.yml</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">mtv_management_migration_targets:
+- name: rhev-target-1 # Required
+  type: ovirt
+  host: rhev.infra.demo.redhat.com
+  username: admin@internal
+  sdkEndpoint: /ovirt-engine/api #if not provided automatically will be added
+  password: &lt;RHEV-PASSWORD&gt;
+  insecureSkipTlsVerify: true
+  mapping:
+    create: true</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>These values should match the VMware or RHV connection you already described in the inventory.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="create-providers-from-the-cli"><a class="anchor" href="#create-providers-from-the-cli"></a>Create providers from the CLI</h2>
+<div class="sectionbody">
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">ansible-navigator run --eei=quay.io/redhat-cop/openshift-virtualization-migration-ee:latest --pp=missing -m stdout --pae=false --senv=K8S_AUTH_HOST=$(oc whoami --show-server) --senv=K8S_AUTH_VERIFY_SSL=false --senv=K8S_AUTH_API_KEY=$(oc whoami -t) infra.openshift_virtualization_migration.mtv_provider_vmware -e openshift_api_key=$(oc whoami -t) -i &lt;inventory&gt; --extra-vars "@var.yml"</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Use <code>mtv_provider_ovirt</code> instead of <code>mtv_provider_vmware</code> when the source is RHV.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="create-providers-with-aap"><a class="anchor" href="#create-providers-with-aap"></a>Create providers with AAP</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>After seed, AAP has the workflow that registers MTV providers.</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>In AAP, open <strong>Templates</strong> under <strong>Automation Execution</strong> and launch <strong>Configure OpenShift Virtualization Migration</strong> (rocket icon).</p>
+</li>
+</ol>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../guides/rhdp/_images/aap-launch-virtualization-migration-workflow.png" alt="Launch the Configure OpenShift Virtualization Migration Workflow Job Template">
+</div>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Wait until the Target Configuration node succeeds.</p>
+</li>
+</ol>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../guides/rhdp/_images/aap-workflow-configure-target.png" alt="Configure Migration Target Workflow">
+</div>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>In the OpenShift web console, open <strong>Migration</strong> → <strong>Providers for virtualization</strong>. The provider is in the <code>openshift-mtv</code> namespace. A green check means the connection is valid.</p>
+</li>
+</ol>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../guides/rhdp/_images/openshift-mtv-providers.png" alt="MTV Providers">
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>The <code>openshift-mtv</code> namespace may not appear in the Project dropdown. Select <strong>Show default projects</strong> so projects that start with <code>openshift</code> are listed.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Confirm a Secret for the VDDK image exists in <code>openshift-mtv</code> (<strong>Workloads</strong> → <strong>Secrets</strong>). Do not use this page to create NetworkMaps or StorageMaps; that is <a href="create-maps.html" class="xref page">Create maps</a>.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="when-you-are-done"><a class="anchor" href="#when-you-are-done"></a>When you are done</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>MTV has a provider for the source hypervisor. Continue to <a href="create-maps.html" class="xref page">Create maps</a>.</p>
+</div>
+</div>
 </div>
 <nav class="pagination">
-  <span class="prev"><a href="../home.html" class="query-params-link">Introduction</a></span>
-  <span class="next"><a href="setup-environment.html" class="query-params-link">Get AAP ready</a></span>
+  <span class="prev"><a href="run-a-migration.html" class="query-params-link">Run a migration</a></span>
+  <span class="next"><a href="create-maps.html" class="query-params-link">Create maps</a></span>
 </nav>
 </article>
 <aside class="toc sidebar" data-title="Contents" data-levels="2">
