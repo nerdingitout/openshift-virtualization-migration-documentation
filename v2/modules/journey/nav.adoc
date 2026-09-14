@@ -6,7 +6,7 @@
 * xref:configure-inventory.adoc[Configure inventory for your environment]
 * xref:seed-aap.adoc[Seed Migration Factory into AAP]
 * xref:run-a-migration.adoc[Run a migration]
-** xref:guides:ansible-playbooks:migration/configure_target.adoc[Create providers]
+** xref:create-providers.adoc[Create providers]
 ** xref:create-maps.adoc[Create maps]
 ** xref:prepare-migration-wave.adoc[Prepare a migration wave]
 ** xref:execute-migration.adoc[Execute the migration]
