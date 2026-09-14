@@ -6,6 +6,9 @@ content:
     - url: .
       start_path: guides
       branches: HEAD
+    - url: .
+      start_path: v2
+      branches: HEAD
 
 asciidoc:
   attributes:

@@ -1,0 +1,7 @@
+= Red Hat Demo Platform
+
+Use the Red Hat Demo Platform catalog when you need a lab that already includes the OpenShift baseline and AAP. These docs still do not walk through installing OpenShift.
+
+include::page$_placeholder.adoc[]
+
+The current RHDP workshop still lives at xref:guides:rhdp:rhdp.adoc[Ansible for OpenShift Virtualization Migration on Red Hat Demo Platform].

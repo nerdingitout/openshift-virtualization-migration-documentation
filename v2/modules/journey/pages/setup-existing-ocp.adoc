@@ -1,0 +1,5 @@
+= Deploy AAP on your OpenShift
+
+Deploy Ansible Automation Platform onto the OpenShift cluster you already have, then add Migration Factory. These docs do not cover installing OpenShift.
+
+include::page$_placeholder.adoc[]

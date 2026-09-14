@@ -1,0 +1,3 @@
+= Scale the automation
+
+include::page$_placeholder.adoc[]

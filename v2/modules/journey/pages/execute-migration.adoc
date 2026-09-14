@@ -1,0 +1,5 @@
+= Execute the migration
+
+Create the plan and run the migration. The procedure currently lives in the fused migrate article until that page is split.
+
+include::page$_fused-migrate.adoc[]

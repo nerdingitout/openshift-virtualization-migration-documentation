@@ -1,0 +1,3 @@
+= Verify the migration
+
+include::page$_placeholder.adoc[]

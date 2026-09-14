@@ -1,0 +1,3 @@
+= Prepare a migration wave
+
+include::page$_placeholder.adoc[]

@@ -1,0 +1,7 @@
+= Migration Factory V2
+
+This is the job-based documentation for Ansible for OpenShift Virtualization Migration. Start with the journey in the left nav: confirm OpenShift is ready, get AAP ready, configure inventory, seed, then run a migration.
+
+The current published documentation (playbooks, RHDP workshop, prerequisites) is still at xref:guides::home.adoc[Development Guides (v1)]. Both sites ship from the same GitHub Pages deploy.
+
+Use xref:journey:confirm-openshift-ready.adoc[Confirm OpenShift is ready] to begin.

@@ -1,0 +1,5 @@
+= Use an AAP you already have
+
+You already run Ansible Automation Platform. Add the Migration Factory components to it.
+
+include::page$_placeholder.adoc[]

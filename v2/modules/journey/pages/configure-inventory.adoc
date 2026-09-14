@@ -1,0 +1,108 @@
+= Configure inventory for your environment
+
+The job is to tell Migration Factory **where everything lives** so seeding and later jobs talk to the right places: Ansible Automation Platform, the OpenShift cluster that already has OpenShift Virtualization and MTV, and the VMware source.
+
+This is not an OpenShift install guide. Confirm the cluster is ready first (xref:confirm-openshift-ready.adoc[Confirm OpenShift is ready]). The type of OpenShift (single node, multi-node, and so on) does not change this job.
+
+When this job is done, you have **one inventory file** that matches how you actually run: all on one cluster, or AAP / OpenShift / VMware on different hosts. xref:seed-aap.adoc[Seed Migration Factory into AAP] uses that file. Do not seed until the inventory matches the environment.
+
+== What the inventory is for
+
+Migration Factory reads an Ansible inventory. Groups in that file are how you model the environment. They are not product features to learn before you can start.
+
+[cols="1,2"]
+|===
+| Group | What it is for
+
+| `all.vars`
+| Values that apply everywhere: execution environment image, registry credentials, Git repo for the collection, Automation Hub token, AAP version channel.
+
+| `migration_hub`
+| The OpenShift cluster that hosts the control plane for this sitting (often where AAP is installed if you deploy AAP on OpenShift).
+
+| `migration_spoke`
+| The OpenShift cluster (or clusters) that receive VMs. VMware sources are declared here as `migration_targets`.
+
+| `migration_aap`
+| An AAP instance you already have. Use this group when you are **not** asking Migration Factory to install AAP on the hub.
+|===
+
+Copy `inventory.yml` from the collection repository. Do not edit the sample in place. Values still set to `changeme` are the ones you must replace.
+
+== Choose a layout
+
+Pick the layout that matches the hosts you already have. You are not choosing an OpenShift flavor.
+
+=== All in one
+
+AAP, OpenShift (with Virtualization and MTV), and the path to VMware are described against **one** OpenShift cluster.
+
+* Put the **same** host name in both `migration_hub` and `migration_spoke`.
+* Do not add `migration_aap` unless you already run AAP somewhere else.
+* Typical for a lab, including Red Hat Demo Platform.
+
+=== Different hosts for AAP, OpenShift, and VMware
+
+* `migration_hub` — OpenShift API for the hub cluster.
+* `migration_spoke` — OpenShift API for each destination cluster, plus `migration_targets` for vCenter.
+* `migration_aap` — hostname and token (or username and password) for the AAP you already run. On the hub host, `install_aap: false` so seed does not try to install another AAP.
+
+Tested shapes of these layouts still exist at xref:guides:tested-deployments:tested.adoc[Tested deployments] (multi-cluster, multi-cluster with existing AAP, single cluster). Use them as examples, not as extra OpenShift install types.
+
+== Fill in connections
+
+For each OpenShift host, set `openshift_host` (API URL). Use **one** of: username and password, a temporary API token (`oc login`), or a long-lived service account token.
+
+For VMware, under `migration_spoke` `vars.migration_targets`, name the vCenter (`type: vmware`, host, username, password, VDDK image). On the spoke host, list that name in `configured_migration_targets`.
+
+VDDK is licensed VMware content. Use a VDDK image **you** are entitled to build (see the `openshift-virtualization-vmware-vddk` repository). Do not copy an internal test image into a customer environment.
+
+For `all.vars`, set at least:
+
+* Image registry host and credentials for the execution environment (`container_host`, `container_username`, `container_password`).
+* Git URL and credentials so AAP can pull the collection (`aap_project_repo`, then SSH key or personal access token).
+* Automation Hub token (`automation_hub_certified_token` and `automation_hub_validated_token`).
+* AAP subscription: either a manifest at seed time, or `rh_username` / `rh_password` — not both styles mixed by accident.
+
+If OpenShift Virtualization and MTV are already on the cluster, leave operator-management lists empty (`aap_seed_operator_management_hub: []` and `aap_seed_operator_management_spoke: []`) so seed does not try to install them again.
+
+== Skeleton
+
+[,yaml]
+----
+all:
+  vars:
+    # Common variables applied to all inventory groups
+    my_var: 'my_var_value'
+
+migration_hub:
+  hosts:
+    hub-cluster:
+      openshift_host: https://api.example.com:6443
+
+migration_spoke:
+  hosts:
+    spoke-cluster:
+      openshift_host: https://api.example.com:6443
+      configured_migration_targets:
+        - my-vmware-cluster
+  vars:
+    migration_targets:
+      - name: my-vmware-cluster
+        type: vmware
+        host: vcenter.example.com
+
+# Only when AAP already exists and you will not install it on the hub
+migration_aap:
+  hosts:
+    aap_host:
+      aap_hostname: aap.example.com
+      aap_token: changeme
+      aap_validate_certs: true
+----
+
+For all-in-one, `hub-cluster` and `spoke-cluster` are the same host name. For split hosts, they differ, and `migration_aap` is filled in.
+
+== When you are done
+
+Save the inventory. The next job is xref:seed-aap.adoc[Seed Migration Factory into AAP], which depends on this file. If seed fails on credentials or the wrong host, return here; do not invent a second inventory per AAP version.
