@@ -238,16 +238,16 @@
 <div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
-<p>The job is to <strong>bring Migration Factory to life inside Ansible Automation Platform</strong>: organizations, project, execution environment, credentials, and job templates land on AAP so you can run a migration without installing the collection by hand on every laptop.</p>
+<p>Bring Migration Factory to life inside Ansible Automation Platform: organizations, project, execution environment, credentials, and job templates land on AAP so you can run a migration without installing the collection by hand on every laptop.</p>
 </div>
 <div class="paragraph">
-<p>This job uses the inventory you just built (<a href="configure-inventory.html" class="xref page">Configure inventory for your environment</a>). OpenShift is already there with Virtualization and MTV (<a href="confirm-openshift-ready.html" class="xref page">Confirm OpenShift is ready</a>). Do not seed until those two are true.</p>
+<p>Use the inventory you just built (<a href="configure-inventory.html" class="xref page">Configure inventory for your environment</a>). OpenShift is already there with Virtualization and MTV (<a href="confirm-openshift-ready.html" class="xref page">Confirm OpenShift is ready</a>). Do not seed until those two are true.</p>
 </div>
 <div class="paragraph">
-<p>When this job is done, you can log in to AAP and see Migration Factory content. The next job is <a href="run-a-migration.html" class="xref page">Run a migration</a>. If AAP already has that content from a previous sitting, skip this page.</p>
+<p>When you are done, you can log in to AAP and see Migration Factory content. Next is <a href="run-a-migration.html" class="xref page">Run a migration</a>. If AAP already has that content from a previous sitting, skip this page.</p>
 </div>
 <div class="paragraph">
-<p>Bootstrap, preseed, and seed <strong>roles</strong> are how the collection implements this job. You do not run them as three separate navigator commands. Look them up under <a href="../roles/aap_seed.html" class="xref page">Look up an Ansible role</a> if you need the internals. Here you run <strong>one playbook</strong>, chosen by how you got AAP.</p>
+<p>Bootstrap, preseed, and seed <strong>roles</strong> are how the collection implements this. You do not run them as three separate navigator commands. Look them up under <a href="../roles/aap_seed.html" class="xref page">Look up an Ansible role</a> if you need the internals. Here you run <strong>one playbook</strong>, chosen by how you got AAP.</p>
 </div>
 </div>
 </div>
@@ -346,7 +346,7 @@
 </div>
 </div>
 <div class="paragraph">
-<p>The <code>migration_aap</code> group must contain <code>aap_hostname</code> and either <code>aap_token</code> or username and password. If those are missing, seed fails; go back to the inventory job, do not invent a second playbook.</p>
+<p>The <code>migration_aap</code> group must contain <code>aap_hostname</code> and either <code>aap_token</code> or username and password. If those are missing, seed fails; go back to the inventory, do not invent a second playbook.</p>
 </div>
 </div>
 </div>
@@ -362,7 +362,7 @@
 <p>OpenShift Virtualization or MTV missing — the prerequisites check belongs on <a href="confirm-openshift-ready.html" class="xref page">Confirm OpenShift is ready</a>, not a different seed command.</p>
 </li>
 <li>
-<p>AAP gateway or organization wait errors after a partial install — reset AAP using <a href="../../guides/appendix/tips.html#reset-the-configuration-of-aap" class="xref page">Reset the configuration of AAP</a>, then rerun. That is recovery, not a second job.</p>
+<p>AAP gateway or organization wait errors after a partial install — reset AAP using <a href="../../guides/appendix/tips.html#reset-the-configuration-of-aap" class="xref page">Reset the configuration of AAP</a>, then rerun. That is recovery, not a second procedure.</p>
 </li>
 </ul>
 </div>

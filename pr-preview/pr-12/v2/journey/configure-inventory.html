@@ -238,13 +238,13 @@
 <div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
-<p>The job is to tell Migration Factory <strong>where everything lives</strong> so seeding and later jobs talk to the right places: Ansible Automation Platform, the OpenShift cluster that already has OpenShift Virtualization and MTV, and the VMware source.</p>
+<p>Tell Migration Factory <strong>where everything lives</strong> so seeding and later steps talk to the right places: Ansible Automation Platform, the OpenShift cluster that already has OpenShift Virtualization and MTV, and the VMware source.</p>
 </div>
 <div class="paragraph">
-<p>This is not an OpenShift install guide. Confirm the cluster is ready first (<a href="confirm-openshift-ready.html" class="xref page">Confirm OpenShift is ready</a>). The type of OpenShift (single node, multi-node, and so on) does not change this job.</p>
+<p>This is not an OpenShift install guide. Confirm the cluster is ready first (<a href="confirm-openshift-ready.html" class="xref page">Confirm OpenShift is ready</a>). The type of OpenShift (single node, multi-node, and so on) does not change these steps.</p>
 </div>
 <div class="paragraph">
-<p>When this job is done, you have <strong>one inventory file</strong> that matches how you actually run: all on one cluster, or AAP / OpenShift / VMware on different hosts. <a href="seed-aap.html" class="xref page">Seed Migration Factory into AAP</a> uses that file. Do not seed until the inventory matches the environment.</p>
+<p>When you are done, you have <strong>one inventory file</strong> that matches how you actually run: all on one cluster, or AAP / OpenShift / VMware on different hosts. <a href="seed-aap.html" class="xref page">Seed Migration Factory into AAP</a> uses that file. Do not seed until the inventory matches the environment.</p>
 </div>
 </div>
 </div>
@@ -416,7 +416,7 @@ migration_aap:
 <h2 id="when-you-are-done"><a class="anchor" href="#when-you-are-done"></a>When you are done</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Save the inventory. The next job is <a href="seed-aap.html" class="xref page">Seed Migration Factory into AAP</a>, which depends on this file. If seed fails on credentials or the wrong host, return here; do not invent a second inventory per AAP version.</p>
+<p>Save the inventory. Next, <a href="seed-aap.html" class="xref page">Seed Migration Factory into AAP</a>, which depends on this file. If seed fails on credentials or the wrong host, return here; do not invent a second inventory per AAP version.</p>
 </div>
 </div>
 </div>
