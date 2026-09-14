@@ -52,7 +52,7 @@ Typical for a lab, including Red Hat Demo Platform.
 
 **Sources** (`vm_sources`): `type` (`vmware` or `ovirt`), `host`, `username`, `password`, `sdk_endpoint` (`/sdk` for vSphere, `/ovirt-engine/api` for RHV). Optional VDDK image under `vddk.image` for VMware. VDDK is licensed VMware content; use an image **you** are entitled to build. Do not copy an internal test image into a customer environment.
 
-**OpenShift** (`migration_clusters`): `openshift_host` (API URL). Use **one** of `openshift_api_key` (service account token) or `openshift_temporary_api_key` (`oc login`). Optional: `mtv_namespace` (default `openshift-mtv`), `default_target_namespace`, `configure_mtv: true`.
+**OpenShift** (`migration_clusters`): `openshift_host` (API URL). Use **one** of `openshift_api_key` (service account token) or `openshift_temporary_api_key` (`oc login`). To mint a long-lived token, see xref:roles:utility_openshift_target_credential.adoc[utility_openshift_target_credential]. Optional: `mtv_namespace` (default `openshift-mtv`), `default_target_namespace`, `configure_mtv: true`.
 
 == Skeleton
 
