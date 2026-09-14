@@ -176,14 +176,135 @@
   <div class="content">
 <article class="doc">
 <h1 class="page">Red Hat Demo Platform</h1>
+<div id="preamble">
+<div class="sectionbody">
 <div class="paragraph">
-<p>Use the Red Hat Demo Platform catalog when you need a lab that already includes the OpenShift baseline and AAP. These docs still do not walk through installing OpenShift.</p>
+<p>Use Red Hat Demo Platform (RHDP) when you need a short-lived lab: an OpenShift cluster with OpenShift Virtualization and MTV, plus a vSphere source. These docs do not walk through installing OpenShift.</p>
 </div>
 <div class="paragraph">
-<p>This page is a stub for the v2 navigation preview. Content will follow tester feedback.</p>
+<p>When you are done, you can <code>oc login</code> as <strong>admin</strong>, and you have the API URL, console URL, and vCenter details from the service. AAP is <strong>not</strong> in this catalog item. Next is <a href="setup-existing-ocp.html" class="xref page">Deploy AAP on your OpenShift</a>, then <a href="configure-inventory.html" class="xref page">Configure inventory for your environment</a>.</p>
 </div>
 <div class="paragraph">
-<p>The current RHDP workshop still lives at <a href="../../guides/rhdp/rhdp.html" class="xref page">Ansible for OpenShift Virtualization Migration on Red Hat Demo Platform</a>.</p>
+<p>The catalog item is <a href="https://catalog.demo.redhat.com/catalog?item=babylon-catalog-prod/openshift-cnv.ocp-virt-roadshow-multi-user.prod&amp;utm_source=webapp&amp;utm_medium=share-link">Experience OpenShift Virtualization Roadshow</a>. You need RHDP access to order it.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="order-the-lab"><a class="anchor" href="#order-the-lab"></a>Order the lab</h2>
+<div class="sectionbody">
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Open the catalog item and select <strong>Order</strong>.</p>
+</li>
+<li>
+<p>Activity: <strong>Practice / Enablement</strong>. Purpose: <strong>Conduct internal training/enablement</strong>.</p>
+</li>
+<li>
+<p>Leave the other fields at their defaults.</p>
+</li>
+<li>
+<p>Confirm the warnings and click <strong>Order</strong>.</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>Provisioning takes a while. Track it in the RHDP portal. You get email when the service is ready.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="collect-connection-details"><a class="anchor" href="#collect-connection-details"></a>Collect connection details</h2>
+<div class="sectionbody">
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Open the service for <strong>Experience OpenShift Virtualization Roadshow</strong>.</p>
+</li>
+</ol>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../guides/rhdp/_images/rhdp-services-list.png" alt="RHDP services list">
+</div>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Open the <strong>Details</strong> tab. Copy:</p>
+<div class="ulist">
+<ul>
+<li>
+<p>OpenShift API server URL</p>
+</li>
+<li>
+<p>OpenShift web console URL</p>
+</li>
+<li>
+<p><strong>admin</strong> password</p>
+</li>
+<li>
+<p>vCenter host, username, and password (the workshop VMware source)</p>
+</li>
+</ul>
+</div>
+</li>
+</ol>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../guides/rhdp/_images/rhdp-service-details.png" alt="RHDP service details">
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="log-in-to-the-cluster"><a class="anchor" href="#log-in-to-the-cluster"></a>Log in to the cluster</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Use the bastion VM that RHDP deploys, or your laptop if <code>oc</code> is already installed.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">oc login --insecure-skip-tls-verify=true \
+  --username=admin \
+  --password=&lt;password&gt; \
+  --server=https://api.cluster-&lt;cluster_id&gt;.dynamic.redhatworkshops.io:6443</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Replace the password and <code>--server</code> value with the Details tab. Confirm OpenShift Virtualization and MTV are present (<a href="confirm-openshift-ready.html" class="xref page">Confirm OpenShift is ready</a>).</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="what-you-do-not-do-here"><a class="anchor" href="#what-you-do-not-do-here"></a>What you do not do here</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p>Do not run the v1 playbook <code>migration_factory_aap</code>. Collection <code>v2</code> installs AAP with <code>utility_aap_deploy</code> only.</p>
+</li>
+<li>
+<p>Do not fill a hub/spoke inventory (<code>migration_hub</code> / <code>migration_spoke</code>). v2 uses <code>migration_aap</code>, <code>vm_sources</code>, and <code>migration_clusters</code>.</p>
+</li>
+<li>
+<p>Do not seed AAP until AAP is running and the inventory matches those groups.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>The longer v1 workshop (including screenshots of an already-seeded AAP) is still at <a href="../../guides/rhdp/rhdp.html" class="xref page">Ansible for OpenShift Virtualization Migration on Red Hat Demo Platform</a>. Follow this page and the v2 inventory/seed path instead of that deploy chapter.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="when-you-are-done"><a class="anchor" href="#when-you-are-done"></a>When you are done</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>You have an OpenShift lab and a vSphere source. Deploy AAP (<a href="setup-existing-ocp.html" class="xref page">Deploy AAP on your OpenShift</a>), put the RHDP API, token, AAP URL, and vCenter values into the v2 inventory (one cluster, one source), then <a href="seed-aap.html" class="xref page">Seed Migration Factory into AAP</a>.</p>
+</div>
+</div>
 </div>
 <nav class="pagination">
   <span class="prev"><a href="setup-environment.html" class="query-params-link">Get AAP ready</a></span>
