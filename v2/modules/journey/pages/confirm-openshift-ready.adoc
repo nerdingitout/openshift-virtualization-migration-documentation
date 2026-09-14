@@ -1,6 +1,6 @@
 = Confirm OpenShift is ready
 
-The job is to start from a cluster that already exists. These docs do not cover installing or deploying OpenShift. The type of OpenShift environment does not change the path.
+Start from a cluster that already exists. These docs do not cover installing or deploying OpenShift. The type of OpenShift environment does not change the path.
 
 Assume OpenShift Container Platform is installed, with baseline components:
 

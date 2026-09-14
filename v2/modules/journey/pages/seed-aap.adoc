@@ -1,12 +1,12 @@
 = Seed Migration Factory into AAP
 
-The job is to **bring Migration Factory to life inside Ansible Automation Platform**: organizations, project, execution environment, credentials, and job templates land on AAP so you can run a migration without installing the collection by hand on every laptop.
+Bring Migration Factory to life inside Ansible Automation Platform: organizations, project, execution environment, credentials, and job templates land on AAP so you can run a migration without installing the collection by hand on every laptop.
 
-This job uses the inventory you just built (xref:configure-inventory.adoc[Configure inventory for your environment]). OpenShift is already there with Virtualization and MTV (xref:confirm-openshift-ready.adoc[Confirm OpenShift is ready]). Do not seed until those two are true.
+Use the inventory you just built (xref:configure-inventory.adoc[Configure inventory for your environment]). OpenShift is already there with Virtualization and MTV (xref:confirm-openshift-ready.adoc[Confirm OpenShift is ready]). Do not seed until those two are true.
 
-When this job is done, you can log in to AAP and see Migration Factory content. The next job is xref:run-a-migration.adoc[Run a migration]. If AAP already has that content from a previous sitting, skip this page.
+When you are done, you can log in to AAP and see Migration Factory content. Next is xref:run-a-migration.adoc[Run a migration]. If AAP already has that content from a previous sitting, skip this page.
 
-Bootstrap, preseed, and seed **roles** are how the collection implements this job. You do not run them as three separate navigator commands. Look them up under xref:roles:aap_seed.adoc[Look up an Ansible role] if you need the internals. Here you run **one playbook**, chosen by how you got AAP.
+Bootstrap, preseed, and seed **roles** are how the collection implements this. You do not run them as three separate navigator commands. Look them up under xref:roles:aap_seed.adoc[Look up an Ansible role] if you need the internals. Here you run **one playbook**, chosen by how you got AAP.
 
 == Before you run anything
 
@@ -67,13 +67,13 @@ ansible-navigator run \
   -i <inventory>
 ----
 
-The `migration_aap` group must contain `aap_hostname` and either `aap_token` or username and password. If those are missing, seed fails; go back to the inventory job, do not invent a second playbook.
+The `migration_aap` group must contain `aap_hostname` and either `aap_token` or username and password. If those are missing, seed fails; go back to the inventory, do not invent a second playbook.
 
 == If seed fails
 
 * Wrong host or `changeme` still in the file — fix xref:configure-inventory.adoc[Configure inventory for your environment] and run the **same** playbook again.
 * OpenShift Virtualization or MTV missing — the prerequisites check belongs on xref:confirm-openshift-ready.adoc[Confirm OpenShift is ready], not a different seed command.
-* AAP gateway or organization wait errors after a partial install — reset AAP using xref:guides:appendix:tips.adoc#reset-the-configuration-of-aap[Reset the configuration of AAP], then rerun. That is recovery, not a second job.
+* AAP gateway or organization wait errors after a partial install — reset AAP using xref:guides:appendix:tips.adoc#reset-the-configuration-of-aap[Reset the configuration of AAP], then rerun. That is recovery, not a second procedure.
 
 == When you are done
 

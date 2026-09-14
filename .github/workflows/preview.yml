@@ -39,21 +39,6 @@ jobs:
         if: github.event.action != 'closed'
         run: touch build/site/.nojekyll
 
-      - name: Prepare Pages root .nojekyll
-        if: github.event.action != 'closed'
-        run: |
-          mkdir -p .nojekyll-root
-          touch .nojekyll-root/.nojekyll
-
-      - name: Ensure .nojekyll at Pages root
-        if: github.event.action != 'closed'
-        uses: JamesIves/github-pages-deploy-action@v4
-        with:
-          folder: .nojekyll-root
-          branch: gh-pages
-          clean: false
-          force: false
-
       - name: Deploy preview
         uses: rossjrw/pr-preview-action@v1
         with:

@@ -1,6 +1,6 @@
 = Get AAP ready
 
-The job is to have Ansible Automation Platform available. OpenShift is already there (see xref:confirm-openshift-ready.adoc[Confirm OpenShift is ready]). Choose how AAP will run. The rest of the site does not fork after that choice.
+Have Ansible Automation Platform available. OpenShift is already there (see xref:confirm-openshift-ready.adoc[Confirm OpenShift is ready]). Choose how AAP will run. The rest of the site does not fork after that choice.
 
 include::page$_placeholder.adoc[]
 

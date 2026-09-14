@@ -1,10 +1,10 @@
 = Configure inventory for your environment
 
-The job is to tell Migration Factory **where everything lives** so seeding and later jobs talk to the right places: Ansible Automation Platform, the OpenShift cluster that already has OpenShift Virtualization and MTV, and the VMware source.
+Tell Migration Factory **where everything lives** so seeding and later steps talk to the right places: Ansible Automation Platform, the OpenShift cluster that already has OpenShift Virtualization and MTV, and the VMware source.
 
-This is not an OpenShift install guide. Confirm the cluster is ready first (xref:confirm-openshift-ready.adoc[Confirm OpenShift is ready]). The type of OpenShift (single node, multi-node, and so on) does not change this job.
+This is not an OpenShift install guide. Confirm the cluster is ready first (xref:confirm-openshift-ready.adoc[Confirm OpenShift is ready]). The type of OpenShift (single node, multi-node, and so on) does not change these steps.
 
-When this job is done, you have **one inventory file** that matches how you actually run: all on one cluster, or AAP / OpenShift / VMware on different hosts. xref:seed-aap.adoc[Seed Migration Factory into AAP] uses that file. Do not seed until the inventory matches the environment.
+When you are done, you have **one inventory file** that matches how you actually run: all on one cluster, or AAP / OpenShift / VMware on different hosts. xref:seed-aap.adoc[Seed Migration Factory into AAP] uses that file. Do not seed until the inventory matches the environment.
 
 == What the inventory is for
 
@@ -105,4 +105,4 @@ For all-in-one, `hub-cluster` and `spoke-cluster` are the same host name. For sp
 
 == When you are done
 
-Save the inventory. The next job is xref:seed-aap.adoc[Seed Migration Factory into AAP], which depends on this file. If seed fails on credentials or the wrong host, return here; do not invent a second inventory per AAP version.
+Save the inventory. Next, xref:seed-aap.adoc[Seed Migration Factory into AAP], which depends on this file. If seed fails on credentials or the wrong host, return here; do not invent a second inventory per AAP version.
