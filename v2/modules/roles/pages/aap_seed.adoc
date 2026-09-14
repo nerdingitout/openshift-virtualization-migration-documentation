@@ -1,1 +1,7 @@
 = aap_seed
+
+Pushes Migration Factory configuration into Ansible Automation Platform (project, inventory, credentials, job templates). Used from xref:journey:seed-aap.adoc[Seed Migration Factory into AAP].
+
+Playbook: `infra.openshift_virtualization_migration.vmf_seed_aap` (`playbooks/vmf_seed_aap.yml` on the collection `v2` branch).
+
+Full argument list: link:https://github.com/redhat-cop/openshift_virtualization_migration/blob/v2/roles/aap_seed/README.md[aap_seed README].

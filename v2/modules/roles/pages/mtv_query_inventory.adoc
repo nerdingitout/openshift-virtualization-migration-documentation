@@ -1,1 +1,5 @@
 = mtv_query_inventory
+
+Queries the MTV inventory service (providers, datastores, networks, NADs). Used by xref:mtv_maps.adoc[mtv_maps]; you do not run it as its own journey step.
+
+Full argument list: link:https://github.com/redhat-cop/openshift_virtualization_migration/blob/v2/roles/mtv_query_inventory/README.md[mtv_query_inventory README].

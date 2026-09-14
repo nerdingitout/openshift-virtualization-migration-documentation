@@ -1,1 +1,7 @@
 = mtv_provider
+
+Creates an MTV/Forklift source Provider CR (and its secret) on the destination OpenShift cluster for one source–target pair. Used from xref:journey:create-providers.adoc[Create providers].
+
+Playbook: `infra.openshift_virtualization_migration.vmf_mtv_provider` (`playbooks/vmf_mtv_provider.yml` on the collection `v2` branch).
+
+Launch once per source–target pair. Full argument list: link:https://github.com/redhat-cop/openshift_virtualization_migration/blob/v2/roles/mtv_provider/README.md[mtv_provider README].

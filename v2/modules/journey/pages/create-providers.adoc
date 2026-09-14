@@ -1,88 +1,58 @@
 = Create providers
 
-Register the source hypervisor with Migration Toolkit for Virtualization so later steps can map networks and storage and run a wave. Seed must already have succeeded (xref:seed-aap.adoc[Seed Migration Factory into AAP]).
+Register the source hypervisor with Migration Toolkit for Virtualization on the destination OpenShift cluster so maps and plans can use it. Seed must already have succeeded (xref:seed-aap.adoc[Seed Migration Factory into AAP]).
 
-When you are done, MTV shows a provider with a green check in the `openshift-mtv` namespace. Next is xref:create-maps.adoc[Create maps].
+When you are done, MTV shows a provider with a green check in the target's `mtv_namespace` (usually `openshift-mtv`). Next is xref:create-maps.adoc[Create maps]. Do not create maps until the provider is Ready.
 
-You can configure these MTV providers:
+The collection v2 playbook is `vmf_mtv_provider`. It runs the `mtv_provider` role: one source–target pair per launch. Source type (`vmware` or `ovirt`) and connection details come from the `vm_sources` host. OpenShift connection comes from the AAP OpenShift credential (`K8S_AUTH_*`) or from the `migration_clusters` host. Internals: xref:roles:mtv_provider.adoc[mtv_provider].
 
-* VMware, using the link:https://console.redhat.com/ansible/automation-hub/repo/validated/infra/openshift_virtualization_migration/content/playbook/mtv_provider_vmware.yml/[`mtv_provider_vmware`] playbook.
-* Red Hat Virtualization, using the link:https://console.redhat.com/ansible/automation-hub/repo/validated/infra/openshift_virtualization_migration/content/playbook/mtv_provider_ovirt.yml/[`mtv_provider_ovirt`] playbook.
-
-The playbooks use the `mtv_management` role. After seed, the same work can run from AAP instead of `ansible-navigator`.
+If the target has several sources, launch once per pair (`source_name` + `target_name`).
 
 == Prerequisites
 
-* Logged in to the cluster over CLI with `oc login`.
-* The cluster is ready for OpenShift Virtualization Migration (xref:confirm-openshift-ready.adoc[Confirm OpenShift is ready]).
-* Inventory matches the environment (xref:configure-inventory.adoc[Configure inventory for your environment]).
+* Logged in to the cluster over CLI with `oc login` if you run from the CLI.
+* The cluster is ready (xref:confirm-openshift-ready.adoc[Confirm OpenShift is ready]).
+* Inventory matches collection v2 (xref:configure-inventory.adoc[Configure inventory for your environment]).
+* Seed created the **OpenShift Virtualization Migration - MTV Provider** template.
 
-=== Required variables
+Required extra vars (AAP survey after seed):
 
-* *mtv_management_migration_targets (Required)*: details about the VMware or RHV environment.
-
-The following example configures a VMware provider in a `var.yml` file:
-
-.var.yml
-[source,yaml]
-----
-mtv_management_migration_targets:
-- name: vmware-2w7dj
-  type: vmware
-  host: vcsrs00-vc.infra.demo.redhat.com
-  username: ocpvirt-2w7dj-user1@infra
-  password: <VCENTER-PASSWORD>
-  vddk:
-  image: quay.io/redhat-cop/openshift-virtualization-migration-vddk:latest #this VDDK image is for demo purposes only. Must NOT be distributed externally.
-  username: "{{ container_username }}"
-  password: "{{ container_password }}"
-  sdkEndpoint: /sdk
-  insecureSkipTlsVerify: true
-  mapping:
-    create: true
-----
-
-The following example configures a RHV provider in a `var.yml` file:
-
-.var.yml
-[source,yaml]
-----
-mtv_management_migration_targets:
-- name: rhev-target-1 # Required
-  type: ovirt
-  host: rhev.infra.demo.redhat.com
-  username: admin@internal
-  sdkEndpoint: /ovirt-engine/api #if not provided automatically will be added
-  password: <RHEV-PASSWORD>
-  insecureSkipTlsVerify: true
-  mapping:
-    create: true
-----
-
-These values should match the VMware or RHV connection you already described in the inventory.
+* `source_name` — inventory host in `vm_sources`.
+* `target_name` — inventory host in `migration_clusters`. That host's `vm_sources` list must include `source_name`.
 
 == Create providers from the CLI
 
 [,shell]
 ----
-ansible-navigator run --eei=quay.io/redhat-cop/openshift-virtualization-migration-ee:latest --pp=missing -m stdout --pae=false --senv=K8S_AUTH_HOST=$(oc whoami --show-server) --senv=K8S_AUTH_VERIFY_SSL=false --senv=K8S_AUTH_API_KEY=$(oc whoami -t) infra.openshift_virtualization_migration.mtv_provider_vmware -e openshift_api_key=$(oc whoami -t) -i <inventory> --extra-vars "@var.yml"
+ansible-navigator run \
+  --pp=missing \
+  --eei=quay.io/redhat-cop/openshift-virtualization-migration-ee:latest \
+  -m stdout \
+  --pae=false \
+  --senv=K8S_AUTH_HOST=$(oc whoami --show-server) \
+  --senv=K8S_AUTH_VERIFY_SSL=false \
+  --senv=K8S_AUTH_API_KEY=$(oc whoami -t) \
+  infra.openshift_virtualization_migration.vmf_mtv_provider \
+  -i <inventory> \
+  -e source_name=<source-host> \
+  -e target_name=<openshift-host>
 ----
 
-Use `mtv_provider_ovirt` instead of `mtv_provider_vmware` when the source is RHV.
+The role reads `type`, `host`, `sdk_endpoint`, and VDDK from the source host. Username and password come from that host in the inventory (CLI) or from the **Migration Factory - Source Environment** credential (AAP).
+
+Optional: `mtv_provider_provider_namespace` if the provider must not land in `openshift-mtv`. Set `mtv_provider_provider_state: absent` to remove a provider and its secret.
 
 == Create providers with AAP
 
-After seed, AAP has the workflow that registers MTV providers.
+. In AAP, open *Templates* under *Automation Execution*.
+. Launch **OpenShift Virtualization Migration - MTV Provider**.
+. Survey: **Source Name** and **Target Name** (the inventory host names).
+. Attach the OpenShift credential for the target cluster if the template asks for credentials.
+. Launch and wait until the Provider CR is Ready (the role waits by default).
 
-. In AAP, open *Templates* under *Automation Execution* and launch *Configure OpenShift Virtualization Migration* (rocket icon).
+== Confirm the provider
 
-image::guides:rhdp:aap-launch-virtualization-migration-workflow.png[Launch the Configure OpenShift Virtualization Migration Workflow Job Template]
-
-. Wait until the Target Configuration node succeeds.
-
-image::guides:rhdp:aap-workflow-configure-target.png[Configure Migration Target Workflow]
-
-. In the OpenShift web console, open *Migration* → *Providers for virtualization*. The provider is in the `openshift-mtv` namespace. A green check means the connection is valid.
+In the OpenShift web console: *Migration* → *Providers for virtualization*. Select the `mtv_namespace` project. A green check means the connection is valid.
 
 image::guides:rhdp:openshift-mtv-providers.png[MTV Providers]
 
@@ -91,8 +61,15 @@ image::guides:rhdp:openshift-mtv-providers.png[MTV Providers]
 The `openshift-mtv` namespace may not appear in the Project dropdown. Select *Show default projects* so projects that start with `openshift` are listed.
 ====
 
-Confirm a Secret for the VDDK image exists in `openshift-mtv` (*Workloads* → *Secrets*). Do not use this page to create NetworkMaps or StorageMaps; that is xref:create-maps.adoc[Create maps].
+For VMware with a VDDK image, confirm the VDDK secret exists in that namespace (*Workloads* → *Secrets*). Do not create NetworkMaps or StorageMaps here; that is xref:create-maps.adoc[Create maps].
+
+== If provider creation fails
+
+* `source_name` or `target_name` missing, or not in inventory — use the same host names as in `vm_sources` / `migration_clusters`.
+* Source not in the target's `vm_sources` list — fix the inventory.
+* Forklift Provider CRD missing — MTV is not installed; see xref:confirm-openshift-ready.adoc[Confirm OpenShift is ready].
+* Source credentials missing — on CLI they live on the `vm_sources` host; in AAP they come from the source credential type seed created.
 
 == When you are done
 
-MTV has a provider for the source hypervisor. Continue to xref:create-maps.adoc[Create maps].
+MTV has a provider for this source on the destination cluster. Continue to xref:create-maps.adoc[Create maps].

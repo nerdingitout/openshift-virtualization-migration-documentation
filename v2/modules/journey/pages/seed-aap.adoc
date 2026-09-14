@@ -1,39 +1,22 @@
 = Seed Migration Factory into AAP
 
-Bring Migration Factory to life inside Ansible Automation Platform: organizations, project, execution environment, credentials, and job templates land on AAP so you can run a migration without installing the collection by hand on every laptop.
+Bring Migration Factory to life inside Ansible Automation Platform: organization, project, inventory, credentials, and job templates land on AAP so you can run providers, maps, and migrations without installing the collection by hand on every laptop.
 
-Use the inventory you just built (xref:configure-inventory.adoc[Configure inventory for your environment]). OpenShift is already there with Virtualization and MTV (xref:confirm-openshift-ready.adoc[Confirm OpenShift is ready]). Do not seed until those two are true.
+Use the inventory you just built (xref:configure-inventory.adoc[Configure inventory for your environment]). OpenShift is already there with Virtualization and MTV (xref:confirm-openshift-ready.adoc[Confirm OpenShift is ready]). AAP is already running (xref:setup-environment.adoc[Get AAP ready]). Do not seed until those are true.
 
-When you are done, you can log in to AAP and see Migration Factory content. Next is xref:run-a-migration.adoc[Run a migration]. If AAP already has that content from a previous sitting, skip this page.
+When you are done, you can log in to AAP and see Migration Factory templates. Next is xref:run-a-migration.adoc[Run a migration]. If AAP already has that content from a previous sitting, skip this page.
 
-Bootstrap, preseed, and seed **roles** are how the collection implements this. You do not run them as three separate navigator commands. Look them up under xref:roles:aap_seed.adoc[Look up an Ansible role] if you need the internals. Here you run **one playbook**, chosen by how you got AAP.
+The collection v2 playbook is `vmf_seed_aap`. It runs the `aap_seed` role only. It does **not** install AAP. Installing AAP on OpenShift is xref:setup-existing-ocp.adoc[Deploy AAP on your OpenShift] (`utility_aap_deploy`). Internals: xref:roles:aap_seed.adoc[aap_seed].
 
 == Before you run anything
 
-* Inventory file matches the hosts you actually have. Values still set to `changeme` will fail seed.
-* `ansible-navigator` can pull the Migration Factory execution environment (image registry credentials from the inventory).
-* If you are **installing** AAP on OpenShift, you have a way to activate it: a subscription manifest file, or Red Hat account vars in the inventory. If you are **using AAP you already have**, you do not pass a manifest; AAP is already entitled.
+* Inventory uses the v2 groups `migration_aap`, `vm_sources`, and `migration_clusters`. Values still set to `changeme` will fail seed.
+* `migration_aap` has `aap_hostname` and either a token or username and password.
+* `ansible-navigator` can pull the Migration Factory execution environment.
 
-== Which playbook to run
+== Populate AAP
 
-Match the choice you made under xref:setup-environment.adoc[Get AAP ready].
-
-[cols="1,2"]
-|===
-| How you got AAP | Playbook
-
-| Red Hat Demo Platform, or deploy AAP on the OpenShift you already have
-| `infra.openshift_virtualization_migration.migration_factory_aap` — installs AAP (when the inventory says to) and loads Migration Factory into it.
-
-| Use an AAP you already have (`migration_aap` in the inventory, `install_aap: false` on the hub)
-| `infra.openshift_virtualization_migration.migration_factory_seed` — does **not** install AAP. It only populates the instance you named.
-|===
-
-Do not run both against the same sitting. Seed on an AAP you already run is not a second install.
-
-== Deploy AAP on OpenShift (including a demo lab)
-
-From the directory that holds your inventory (and the entitlement manifest, if you use one):
+From the directory that holds your inventory:
 
 [,shell]
 ----
@@ -42,41 +25,25 @@ ansible-navigator run \
   --eei=quay.io/redhat-cop/openshift-virtualization-migration-ee:latest \
   -m stdout \
   --pae=false \
-  infra.openshift_virtualization_migration.migration_factory_aap \
-  -i <inventory> \
-  -e openshift_host=$(oc whoami --show-server) \
-  -e openshift_temporary_api_key=$(oc whoami -t) \
-  -e openshift_verify_ssl=false \
-  -e bootstrap_aap_license_manifest=$(pwd)/aap-entitlement-manifest.zip
-----
-
-Drop the `-e openshift_*` extra vars if those values are already complete in the inventory. Drop `bootstrap_aap_license_manifest` if you activate AAP with `rh_username` / `rh_password` instead of a zip file.
-
-This run can take several minutes. A successful recap has `failed=0` on the OpenShift host and on the AAP route.
-
-== Populate an AAP you already have
-
-[,shell]
-----
-ansible-navigator run \
-  --pp=missing \
-  --eei=quay.io/redhat-cop/openshift-virtualization-migration-ee:latest \
-  -m stdout \
-  --pae=false \
-  infra.openshift_virtualization_migration.migration_factory_seed \
+  infra.openshift_virtualization_migration.vmf_seed_aap \
   -i <inventory>
 ----
 
-The `migration_aap` group must contain `aap_hostname` and either `aap_token` or username and password. If those are missing, seed fails; go back to the inventory, do not invent a second playbook.
+The playbook targets the `migration_aap` group.
+
+After a successful run, AAP has at least these job templates (surveys ask for `source_name` and `target_name`):
+
+* **OpenShift Virtualization Migration - MTV Provider** (`playbooks/vmf_mtv_provider.yml`)
+* **OpenShift Virtualization Migration - MTV Maps** (`playbooks/vmf_mtv_maps.yml`)
+* **OpenShift Virtualization Migration - MTV Plans** (`playbooks/vmf_mtv_plans.yml`)
+* **OpenShift Virtualization Migration - Migrate** (`playbooks/vmf_migrate.yml`) — placeholder on collection `v2`; it does not start VMs. See xref:execute-migration.adoc[Execute the migration].
 
 == If seed fails
 
 * Wrong host or `changeme` still in the file — fix xref:configure-inventory.adoc[Configure inventory for your environment] and run the **same** playbook again.
-* OpenShift Virtualization or MTV missing — the prerequisites check belongs on xref:confirm-openshift-ready.adoc[Confirm OpenShift is ready], not a different seed command.
-* AAP gateway or organization wait errors after a partial install — reset AAP using xref:guides:appendix:tips.adoc#reset-the-configuration-of-aap[Reset the configuration of AAP], then rerun. That is recovery, not a second procedure.
+* OpenShift Virtualization or MTV missing — that check belongs on xref:confirm-openshift-ready.adoc[Confirm OpenShift is ready], not a different seed command.
+* AAP not reachable — get AAP running first; seed does not deploy the operator.
 
 == When you are done
 
-AAP holds the Migration Factory organization, project, and job templates. You do not repeat seed for AAP 2.5 vs 2.6 vs 2.7 as different documentation paths; the collection is the same, the execution environment in the inventory is what changed.
-
-Continue to xref:run-a-migration.adoc[Run a migration].
+AAP holds the Migration Factory project, inventory, credentials, and templates. Continue to xref:run-a-migration.adoc[Run a migration].

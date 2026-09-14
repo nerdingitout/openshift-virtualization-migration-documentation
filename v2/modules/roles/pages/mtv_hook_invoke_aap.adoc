@@ -1,1 +1,5 @@
 = mtv_hook_invoke_aap
+
+Triggers AAP automation from an MTV hook. Collection v2 playbook: `infra.openshift_virtualization_migration.mtv_hook_invoke_aap`.
+
+Full argument list: link:https://github.com/redhat-cop/openshift_virtualization_migration/blob/v2/roles/mtv_hook_invoke_aap/README.md[mtv_hook_invoke_aap README].
