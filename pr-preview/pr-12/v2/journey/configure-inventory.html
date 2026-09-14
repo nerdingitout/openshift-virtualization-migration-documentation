@@ -104,7 +104,7 @@
 <ul class="nav-list">
   <li class="nav-item" data-depth="1">
     <button class="nav-item-toggle"></button>
-    <span class="nav-text">Look up an Ansible role</span>
+    <a class="nav-link" href="../roles/index.html">Look up an Ansible role</a>
 <ul class="nav-list">
   <li class="nav-item" data-depth="2">
     <a class="nav-link" href="../roles/aap_seed.html">aap_seed</a>
@@ -284,7 +284,7 @@
 <p><strong>Sources</strong> (<code>vm_sources</code>): <code>type</code> (<code>vmware</code> or <code>ovirt</code>), <code>host</code>, <code>username</code>, <code>password</code>, <code>sdk_endpoint</code> (<code>/sdk</code> for vSphere, <code>/ovirt-engine/api</code> for RHV). Optional VDDK image under <code>vddk.image</code> for VMware. VDDK is licensed VMware content; use an image <strong>you</strong> are entitled to build. Do not copy an internal test image into a customer environment.</p>
 </div>
 <div class="paragraph">
-<p><strong>OpenShift</strong> (<code>migration_clusters</code>): <code>openshift_host</code> (API URL). Use <strong>one</strong> of <code>openshift_api_key</code> (service account token) or <code>openshift_temporary_api_key</code> (<code>oc login</code>). Optional: <code>mtv_namespace</code> (default <code>openshift-mtv</code>), <code>default_target_namespace</code>, <code>configure_mtv: true</code>.</p>
+<p><strong>OpenShift</strong> (<code>migration_clusters</code>): <code>openshift_host</code> (API URL). Use <strong>one</strong> of <code>openshift_api_key</code> (service account token) or <code>openshift_temporary_api_key</code> (<code>oc login</code>). To mint a long-lived token, see <a href="../roles/utility_openshift_target_credential.html" class="xref page">utility_openshift_target_credential</a>. Optional: <code>mtv_namespace</code> (default <code>openshift-mtv</code>), <code>default_target_namespace</code>, <code>configure_mtv: true</code>.</p>
 </div>
 </div>
 </div>

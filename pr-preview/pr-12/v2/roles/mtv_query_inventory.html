@@ -104,7 +104,7 @@
 <ul class="nav-list">
   <li class="nav-item" data-depth="1">
     <button class="nav-item-toggle"></button>
-    <span class="nav-text">Look up an Ansible role</span>
+    <a class="nav-link" href="index.html">Look up an Ansible role</a>
 <ul class="nav-list">
   <li class="nav-item" data-depth="2">
     <a class="nav-link" href="aap_seed.html">aap_seed</a>
@@ -168,7 +168,7 @@
 <nav class="breadcrumbs" aria-label="breadcrumbs">
   <ul>
     <li><a href="../index.html">Migration Factory V2</a></li>
-    <li>Look up an Ansible role</li>
+    <li><a href="index.html">Look up an Ansible role</a></li>
     <li><a href="mtv_query_inventory.html">mtv_query_inventory</a></li>
   </ul>
 </nav>
@@ -177,7 +177,13 @@
 <article class="doc">
 <h1 class="page">mtv_query_inventory</h1>
 <div class="paragraph">
-<p>Queries the MTV inventory service (providers, datastores, networks, NADs). Used by <a href="mtv_maps.html" class="xref page">mtv_maps</a>; you do not run it as its own journey step.</p>
+<p>Queries the MTV inventory service (the Forklift inventory route or an exec into the inventory pod). There is <strong>no</strong> journey playbook for this role. <a href="mtv_maps.html" class="xref page">mtv_maps</a> and <a href="mtv_plans.html" class="xref page">mtv_plans</a> include it.</p>
+</div>
+<div class="paragraph">
+<p>Required: <code>mtv_query_inventory_endpoint_path</code> (for example <code>/providers</code>). OpenShift API host and token come from <code>K8S_AUTH_*</code> or the usual <code>openshift_host</code> / <code>openshift_api_key</code> defaults. Retrieval method is <code>api</code> (default, uses the <code>forklift-inventory</code> route) or <code>exec</code>.</p>
+</div>
+<div class="paragraph">
+<p>Results land in <code>mtv_query_inventory_query_result</code> unless you set <code>mtv_query_inventory_result_var</code>.</p>
 </div>
 <div class="paragraph">
 <p>Full argument list: <a href="https://github.com/redhat-cop/openshift_virtualization_migration/blob/v2/roles/mtv_query_inventory/README.md">mtv_query_inventory README</a>.</p>

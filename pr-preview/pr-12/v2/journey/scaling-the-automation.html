@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <title>Scale the automation :: Ansible for OpenShift Virtualization Migration Documentation</title>
     <link rel="prev" href="archive-plan.html">
-    <link rel="next" href="../roles/aap_seed.html">
+    <link rel="next" href="../roles/index.html">
     <meta name="generator" content="Antora 3.1.15">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -104,7 +104,7 @@
 <ul class="nav-list">
   <li class="nav-item" data-depth="1">
     <button class="nav-item-toggle"></button>
-    <span class="nav-text">Look up an Ansible role</span>
+    <a class="nav-link" href="../roles/index.html">Look up an Ansible role</a>
 <ul class="nav-list">
   <li class="nav-item" data-depth="2">
     <a class="nav-link" href="../roles/aap_seed.html">aap_seed</a>
@@ -176,12 +176,174 @@
   <div class="content">
 <article class="doc">
 <h1 class="page">Scale the automation</h1>
+<div id="preamble">
+<div class="sectionbody">
 <div class="paragraph">
-<p>This page is a stub for the v2 navigation preview. Content will follow tester feedback.</p>
+<p>Repeat the path you just finished for more sources, more OpenShift clusters, and larger waves. Use the same collection <code>v2</code> playbooks and AAP templates. This page is not a cluster autoscaler and not a new installer.</p>
+</div>
+<div class="paragraph">
+<p>When you are done, the inventory lists every hypervisor and destination you care about, AAP has those hosts, and you can run providers, maps, and waves per pair. There is no separate “scale” playbook on collection <code>v2</code>.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="what-actually-repeats"><a class="anchor" href="#what-actually-repeats"></a>What actually repeats</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Collection <code>v2</code> scales by <strong>more inventory hosts</strong> and <strong>more launches</strong>, not by a workflow that fans out every pair for you.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Providers and maps: one launch per <code>source_name</code> + <code>target_name</code> (<a href="create-providers.html" class="xref page">Create providers</a>, <a href="create-maps.html" class="xref page">Create maps</a>).</p>
+</li>
+<li>
+<p>Waves: one <code>mtv_plans_migration_request</code> per sitting; <code>split_plans</code> if the VM list is large (<a href="prepare-migration-wave.html" class="xref page">Prepare a migration wave</a>).</p>
+</li>
+<li>
+<p>Start, verify, archive: each Plan CR (<a href="execute-migration.html" class="xref page">Execute the migration</a>). The AAP <strong>Migrate</strong> template still does not move VMs.</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="more-sources-or-clusters"><a class="anchor" href="#more-sources-or-clusters"></a>More sources or clusters</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Add hosts in the inventory (<a href="configure-inventory.html" class="xref page">Configure inventory for your environment</a>). Copy from the <a href="https://github.com/redhat-cop/openshift_virtualization_migration/blob/v2/inventory/inventory-sample.yml">v2 inventory sample</a> (<code>ocp-staging</code> and extra <code>vm_sources</code> hosts are commented there).</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>One <code>vm_sources</code> host per vCenter or RHV.</p>
+</li>
+<li>
+<p>One <code>migration_clusters</code> host per OpenShift API.</p>
+</li>
+<li>
+<p>On each cluster, <code>vm_sources</code> is the list of source host names that cluster may migrate. A source missing from that list fails provider and maps.</p>
+</li>
+<li>
+<p><code>aap_hosts</code> on a cluster names which <code>migration_aap</code> host seeds it.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Then run <a href="seed-aap.html" class="xref page">Seed Migration Factory into AAP</a> again (<code>vmf_seed_aap</code>) so AAP inventory and credentials match the file. Seed does not install AAP. Do not invent a second seed playbook.</p>
+</div>
+<div class="paragraph">
+<p>Each new pair still needs MTV <strong>Ready</strong> on that cluster (<a href="confirm-openshift-ready.html" class="xref page">Confirm OpenShift is ready</a>) before providers.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="limit-the-destination"><a class="anchor" href="#limit-the-destination"></a>Limit the destination</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><code>vmf_mtv_maps</code> runs on <code>migration_clusters</code> but only when <code>inventory_hostname</code> equals <code>target_name</code>. <code>vmf_mtv_plans</code> runs on <strong>every</strong> host in <code>migration_clusters</code> unless you limit it.</p>
+</div>
+<div class="paragraph">
+<p>When the inventory has several clusters:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>CLI: <code>--limit &lt;openshift-host&gt;</code> on <code>vmf_mtv_plans</code>.</p>
+</li>
+<li>
+<p>AAP: set the job limit to that <code>migration_clusters</code> host.</p>
+</li>
+<li>
+<p>Always pass <code>source_name</code> and <code>target_name</code> for provider and maps (AAP survey).</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="larger-waves"><a class="anchor" href="#larger-waves"></a>Larger waves</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Do not put an entire datacenter in one Plan CR.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Select VMs with <code>vms</code> and/or VMware <code>folders</code>.</p>
+</li>
+<li>
+<p>Set <code>split_plans: true</code> and <code>vms_per_plan</code> (default <code>10</code> when splitting) so MTV and the source stay within capacity.</p>
+</li>
+<li>
+<p>Use a dedicated <code>target_namespace</code> (and matching map namespaces) per tenant or wave if projects should stay isolated.</p>
+</li>
+<li>
+<p>Start, verify, and archive <strong>each</strong> plan from a split wave.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Warm (<code>type: warm</code>) still needs <strong>Cutover</strong> per plan. Collection <code>v2</code> does not schedule cutovers for you.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="what-this-collection-does-not-do-yet"><a class="anchor" href="#what-this-collection-does-not-do-yet"></a>What this collection does not do yet</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p>No job template or workflow that loops every source–target pair in one click.</p>
+</li>
+<li>
+<p>No <code>mtv_migrate</code> role and no working migrate playbook (<code>vmf_migrate.yml</code> is a placeholder).</p>
+</li>
+<li>
+<p>No <code>validate_migration</code> or archive automation — those stay in the OpenShift console.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Per-VM Ansible during a plan is <a href="../roles/mtv_hook_invoke_aap.html" class="xref page">mtv_hook_invoke_aap</a> (MTV hooks). That is not a substitute for splitting waves.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="if-a-second-pair-fails"><a class="anchor" href="#if-a-second-pair-fails"></a>If a second pair fails</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p>Source not in the cluster&#8217;s <code>vm_sources</code> list — fix the inventory and seed again.</p>
+</li>
+<li>
+<p><code>source_name</code> / <code>target_name</code> do not match host names — same names as in the inventory file.</p>
+</li>
+<li>
+<p>Plans hit every cluster — you omitted <code>--limit</code> / AAP limit on <code>vmf_mtv_plans</code>.</p>
+</li>
+<li>
+<p>One huge plan saturates VDDK or storage — lower <code>vms_per_plan</code> and split.</p>
+</li>
+<li>
+<p>New cluster has no MTV — <a href="confirm-openshift-ready.html" class="xref page">Confirm OpenShift is ready</a> first.</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="when-you-are-done"><a class="anchor" href="#when-you-are-done"></a>When you are done</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>You can add the next pair or the next wave with the same templates. Argument lists for the <code>v2</code> roles start at <a href="../roles/index.html" class="xref page">Look up an Ansible role</a>.</p>
+</div>
+</div>
 </div>
 <nav class="pagination">
   <span class="prev"><a href="archive-plan.html" class="query-params-link">Archive the plan</a></span>
-  <span class="next"><a href="../roles/aap_seed.html" class="query-params-link">aap_seed</a></span>
+  <span class="next"><a href="../roles/index.html" class="query-params-link">Look up an Ansible role</a></span>
 </nav>
 </article>
 <aside class="toc sidebar" data-title="Contents" data-levels="2">

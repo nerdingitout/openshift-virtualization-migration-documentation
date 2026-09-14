@@ -104,7 +104,7 @@
 <ul class="nav-list">
   <li class="nav-item" data-depth="1">
     <button class="nav-item-toggle"></button>
-    <span class="nav-text">Look up an Ansible role</span>
+    <a class="nav-link" href="index.html">Look up an Ansible role</a>
 <ul class="nav-list">
   <li class="nav-item" data-depth="2">
     <a class="nav-link" href="aap_seed.html">aap_seed</a>
@@ -168,7 +168,7 @@
 <nav class="breadcrumbs" aria-label="breadcrumbs">
   <ul>
     <li><a href="../index.html">Migration Factory V2</a></li>
-    <li>Look up an Ansible role</li>
+    <li><a href="index.html">Look up an Ansible role</a></li>
     <li><a href="utility_aap_deploy.html">utility_aap_deploy</a></li>
   </ul>
 </nav>
@@ -177,10 +177,13 @@
 <article class="doc">
 <h1 class="page">utility_aap_deploy</h1>
 <div class="paragraph">
-<p>Deploys Ansible Automation Platform onto an OpenShift cluster. Used from <a href="../journey/setup-existing-ocp.html" class="xref page">Deploy AAP on your OpenShift</a>. Does not seed Migration Factory content.</p>
+<p>Deploys Ansible Automation Platform onto an OpenShift cluster (operator and instance). Used from <a href="../journey/setup-existing-ocp.html" class="xref page">Deploy AAP on your OpenShift</a>. Does <strong>not</strong> seed Migration Factory content; that is <a href="aap_seed.html" class="xref page">aap_seed</a>.</p>
 </div>
 <div class="paragraph">
-<p>Playbook: <code>infra.openshift_virtualization_migration.utility_aap_deploy</code> (<code>playbooks/utility_aap_deploy.yml</code> on the collection <code>v2</code> branch).</p>
+<p>Playbook: <code>infra.openshift_virtualization_migration.utility_aap_deploy</code> (<code>playbooks/utility_aap_deploy.yml</code> on the collection <code>v2</code> branch). Targets <code>migration_clusters</code>.</p>
+</div>
+<div class="paragraph">
+<p>Defaults include instance name <code>aap</code>, operator channel <code>stable-2.6</code>, and namespace <code>virtualization-migration</code>. Pass <code>utility_aap_deploy_aap_license_manifest</code> when the operator needs an entitlement zip.</p>
 </div>
 <div class="paragraph">
 <p>Full argument list: <a href="https://github.com/redhat-cop/openshift_virtualization_migration/blob/v2/roles/utility_aap_deploy/README.md">utility_aap_deploy README</a>.</p>

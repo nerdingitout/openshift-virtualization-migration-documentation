@@ -3,7 +3,9 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>ocp_cleanup :: Ansible for OpenShift Virtualization Migration Documentation</title>
+    <title>Look up an Ansible role :: Ansible for OpenShift Virtualization Migration Documentation</title>
+    <link rel="prev" href="../journey/scaling-the-automation.html">
+    <link rel="next" href="aap_seed.html">
     <meta name="generator" content="Antora 3.1.15">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -100,7 +102,7 @@
   </li>
   <li class="nav-item" data-depth="0">
 <ul class="nav-list">
-  <li class="nav-item" data-depth="1">
+  <li class="nav-item is-current-page" data-depth="1">
     <button class="nav-item-toggle"></button>
     <a class="nav-link" href="index.html">Look up an Ansible role</a>
 <ul class="nav-list">
@@ -166,16 +168,69 @@
 <nav class="breadcrumbs" aria-label="breadcrumbs">
   <ul>
     <li><a href="../index.html">Migration Factory V2</a></li>
-    <li><a href="ocp_cleanup.html">ocp_cleanup</a></li>
+    <li><a href="index.html">Look up an Ansible role</a></li>
   </ul>
 </nav>
 </div>
   <div class="content">
 <article class="doc">
-<h1 class="page">ocp_cleanup</h1>
+<h1 class="page">Look up an Ansible role</h1>
 <div class="paragraph">
-<p>This name is not a role on the collection <code>v2</code> branch. The v2 roles are listed under <a href="index.html" class="xref page">Look up an Ansible role</a>.</p>
+<p>These are the roles on the collection <code>v2</code> branch. Journey pages run them through playbooks. Argument lists live in each role&#8217;s README on GitHub (linked from the role page).</p>
 </div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 66.6667%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Role</th>
+<th class="tableblock halign-left valign-top">What it is for</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="aap_seed.html" class="xref page">aap_seed</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Seed AAP with the Migration Factory project, inventory, credentials, and templates. Does not install AAP.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="mtv_provider.html" class="xref page">mtv_provider</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Create one MTV source provider (and secret) per source–target pair.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="mtv_maps.html" class="xref page">mtv_maps</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Create StorageMaps and NetworkMaps for one source–target pair.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="mtv_plans.html" class="xref page">mtv_plans</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Create Plan CRs for a wave. Does not start the migration.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="mtv_query_inventory.html" class="xref page">mtv_query_inventory</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Query the MTV inventory service. Used by maps and plans; not a journey playbook.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="mtv_hook_invoke_aap.html" class="xref page">mtv_hook_invoke_aap</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">From an MTV hook, launch an AAP job template.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="utility_aap_deploy.html" class="xref page">utility_aap_deploy</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Install AAP on OpenShift. Does not seed Migration Factory.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="utility_openshift_target_credential.html" class="xref page">utility_openshift_target_credential</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Create a long-lived OpenShift service account token for AAP.</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>There is no <code>mtv_migrate</code> role on <code>v2</code>. The seeded <strong>Migrate</strong> template is a placeholder (<a href="../journey/execute-migration.html" class="xref page">Execute the migration</a>).</p>
+</div>
+<nav class="pagination">
+  <span class="prev"><a href="../journey/scaling-the-automation.html" class="query-params-link">Scale the automation</a></span>
+  <span class="next"><a href="aap_seed.html" class="query-params-link">aap_seed</a></span>
+</nav>
 </article>
 <aside class="toc sidebar" data-title="Contents" data-levels="2">
   <div class="toc-menu"></div>

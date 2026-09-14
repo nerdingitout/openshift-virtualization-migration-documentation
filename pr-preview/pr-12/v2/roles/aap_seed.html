@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <title>aap_seed :: Ansible for OpenShift Virtualization Migration Documentation</title>
-    <link rel="prev" href="../journey/scaling-the-automation.html">
+    <link rel="prev" href="index.html">
     <link rel="next" href="mtv_hook_invoke_aap.html">
     <meta name="generator" content="Antora 3.1.15">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -104,7 +104,7 @@
 <ul class="nav-list">
   <li class="nav-item" data-depth="1">
     <button class="nav-item-toggle"></button>
-    <span class="nav-text">Look up an Ansible role</span>
+    <a class="nav-link" href="index.html">Look up an Ansible role</a>
 <ul class="nav-list">
   <li class="nav-item is-current-page" data-depth="2">
     <a class="nav-link" href="aap_seed.html">aap_seed</a>
@@ -168,7 +168,7 @@
 <nav class="breadcrumbs" aria-label="breadcrumbs">
   <ul>
     <li><a href="../index.html">Migration Factory V2</a></li>
-    <li>Look up an Ansible role</li>
+    <li><a href="index.html">Look up an Ansible role</a></li>
     <li><a href="aap_seed.html">aap_seed</a></li>
   </ul>
 </nav>
@@ -177,16 +177,38 @@
 <article class="doc">
 <h1 class="page">aap_seed</h1>
 <div class="paragraph">
-<p>Pushes Migration Factory configuration into Ansible Automation Platform (project, inventory, credentials, job templates). Used from <a href="../journey/seed-aap.html" class="xref page">Seed Migration Factory into AAP</a>.</p>
+<p>Pushes Migration Factory into Ansible Automation Platform: organization, project, inventory, credential types, credentials, execution environment, and job templates. Used from <a href="../journey/seed-aap.html" class="xref page">Seed Migration Factory into AAP</a>.</p>
 </div>
 <div class="paragraph">
-<p>Playbook: <code>infra.openshift_virtualization_migration.vmf_seed_aap</code> (<code>playbooks/vmf_seed_aap.yml</code> on the collection <code>v2</code> branch).</p>
+<p>Playbook: <code>infra.openshift_virtualization_migration.vmf_seed_aap</code> (<code>playbooks/vmf_seed_aap.yml</code> on the collection <code>v2</code> branch). Targets the <code>migration_aap</code> group. Does <strong>not</strong> install AAP (<code>utility_aap_deploy</code> does that).</p>
+</div>
+<div class="paragraph">
+<p>After a successful run, AAP has at least these templates (surveys ask for inventory host names <code>source_name</code> and <code>target_name</code>):</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>OpenShift Virtualization Migration - MTV Provider</strong></p>
+</li>
+<li>
+<p><strong>OpenShift Virtualization Migration - MTV Maps</strong></p>
+</li>
+<li>
+<p><strong>OpenShift Virtualization Migration - MTV Plans</strong></p>
+</li>
+<li>
+<p><strong>OpenShift Virtualization Migration - Migrate</strong> — placeholder playbook; see <a href="../journey/execute-migration.html" class="xref page">Execute the migration</a>.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p><code>migration_aap</code> is the controller connection and is <strong>not</strong> copied into the AAP inventory. <code>vm_sources</code> and <code>migration_clusters</code> are.</p>
 </div>
 <div class="paragraph">
 <p>Full argument list: <a href="https://github.com/redhat-cop/openshift_virtualization_migration/blob/v2/roles/aap_seed/README.md">aap_seed README</a>.</p>
 </div>
 <nav class="pagination">
-  <span class="prev"><a href="../journey/scaling-the-automation.html" class="query-params-link">Scale the automation</a></span>
+  <span class="prev"><a href="index.html" class="query-params-link">Look up an Ansible role</a></span>
   <span class="next"><a href="mtv_hook_invoke_aap.html" class="query-params-link">mtv_hook_invoke_aap</a></span>
 </nav>
 </article>
