@@ -107,67 +107,7 @@
     <span class="nav-text">Look up an Ansible role</span>
 <ul class="nav-list">
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="../roles/aap_cleanup.html">aap_cleanup</a>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="../roles/aap_deploy.html">aap_deploy</a>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="../roles/aap_machine_credentials.html">aap_machine_credentials</a>
-  </li>
-  <li class="nav-item" data-depth="2">
     <a class="nav-link" href="../roles/aap_seed.html">aap_seed</a>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="../roles/bootstrap.html">bootstrap</a>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="../roles/cluster_healthcheck.html">cluster_healthcheck</a>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="../roles/create_mf_aap_token.html">create_mf_aap_token</a>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="../roles/mtv_management.html">mtv_management</a>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="../roles/mtv_migrate.html">mtv_migrate</a>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="../roles/network_mgmt.html">network_mgmt</a>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="../roles/ocp_cleanup.html">ocp_cleanup</a>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="../roles/operator_management.html">operator_management</a>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="../roles/validate_migration.html">validate_migration</a>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="../roles/vm_backup_restore.html">vm_backup_restore</a>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="../roles/vm_collect.html">vm_collect</a>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="../roles/vm_hot_plug.html">vm_hot_plug</a>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="../roles/vm_lifecycle.html">vm_lifecycle</a>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="../roles/vm_mac_address.html">vm_mac_address</a>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="../roles/vm_networking.html">vm_networking</a>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="../roles/vm_patching.html">vm_patching</a>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="../roles/vm_ssh.html">vm_ssh</a>
   </li>
   <li class="nav-item" data-depth="2">
     <a class="nav-link" href="../roles/mtv_hook_invoke_aap.html">mtv_hook_invoke_aap</a>
@@ -236,8 +176,313 @@
   <div class="content">
 <article class="doc">
 <h1 class="page">Prepare a migration wave</h1>
+<div id="preamble">
+<div class="sectionbody">
 <div class="paragraph">
-<p>This page is a stub for the v2 navigation preview. Content will follow tester feedback.</p>
+<p>Choose which VMs (or source folders) move together, attach the maps you already created, and let MTV create <strong>Plan</strong> custom resources. Maps must already exist (<a href="create-maps.html" class="xref page">Create maps</a>).</p>
+</div>
+<div class="paragraph">
+<p>When you are done, each plan shows <strong>Ready</strong> in the project you chose. Next is <a href="execute-migration.html" class="xref page">Execute the migration</a>. This page does <strong>not</strong> start a migration.</p>
+</div>
+<div class="paragraph">
+<p>The collection does this with the <code>mtv_plans</code> role, run by the <code>vmf_mtv_plans</code> playbook. The role checks the source and destination providers and the named maps, looks up VMs and folders in the MTV inventory, then applies Plan CRs (or prints them when <code>dry_run</code> is true). Internals are under <a href="../roles/mtv_plans.html" class="xref page">mtv_plans</a>.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="what-a-wave-is"><a class="anchor" href="#what-a-wave-is"></a>What a wave is</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>A wave is one <code>mtv_plans_migration_request</code>: the VMs or folders in this sitting, the maps to use, where the Plan CRs live, and where the VMs should land.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>You must set at least <code>vms</code> or <code>folders</code> (or both).</p>
+</li>
+<li>
+<p><code>source</code> and <code>destination</code> are <strong>MTV provider names</strong>, not inventory host names. Defaults are <code>vmware</code> and <code>host</code>. After <a href="create-providers.html" class="xref page">Create providers</a>, <code>source</code> is usually the RFC 1123 form of the <code>vm_sources</code> host (for example <code>vcenter-prod</code>). Destination stays <code>host</code> unless you changed it.</p>
+</li>
+<li>
+<p>Default map names are <code>&lt;source&gt;-&lt;destination&gt;</code> (for example <code>vcenter-prod-host</code>). Use the names from Create maps if you overrode them.</p>
+</li>
+<li>
+<p><code>split_plans: true</code> with <code>vms_per_plan</code> (default <code>10</code>) batches a large set into several Plan CRs so one plan does not overwhelm the source or OpenShift.</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="prerequisites"><a class="anchor" href="#prerequisites"></a>Prerequisites</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p>Seed succeeded (<a href="seed-aap.html" class="xref page">Seed Migration Factory into AAP</a>).</p>
+</li>
+<li>
+<p>Providers are valid (<a href="create-providers.html" class="xref page">Create providers</a>).</p>
+</li>
+<li>
+<p>StorageMaps and NetworkMaps for this pair are <strong>Ready</strong> (<a href="create-maps.html" class="xref page">Create maps</a>).</p>
+</li>
+<li>
+<p>Inventory matches the collection layout: source hosts in <code>vm_sources</code>, OpenShift hosts in <code>migration_clusters</code>. See the <a href="https://github.com/redhat-cop/openshift_virtualization_migration/blob/v2/inventory/inventory-sample.yml">v2 inventory sample</a>.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Required extra var:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>mtv_plans_migration_request</code> — dict with at least one of <code>vms</code> or <code>folders</code>.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>The playbook targets the <code>migration_clusters</code> group. If that group has more than one host, limit the run to the destination cluster (<code>--limit</code> on the CLI, or a host limit on the AAP job). OpenShift API access comes from <code>K8S_AUTH_HOST</code> / <code>K8S_AUTH_API_KEY</code> (AAP OpenShift credential) or from <code>openshift_host</code> and <code>openshift_api_key</code> on the target host.</p>
+</div>
+<div class="paragraph">
+<p>After seed, the AAP survey still asks for <code>source_name</code> and <code>target_name</code> (inventory host names). Those values do not fill the request dict. Put provider names, maps, and the VM list in <code>mtv_plans_migration_request</code>.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="build-the-request"><a class="anchor" href="#build-the-request"></a>Build the request</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Namespaces:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>mtv_namespace</code> — where MTV is installed (default <code>openshift-mtv</code>). Provider CRs usually live here.</p>
+</li>
+<li>
+<p><code>migration_namespace</code> — where Plan CRs are created (defaults to <code>mtv_namespace</code>).</p>
+</li>
+<li>
+<p><code>target_namespace</code> — where migrated VMs are created (defaults to <code>mtv_namespace</code>).</p>
+</li>
+<li>
+<p><code>source_namespace</code> / <code>destination_namespace</code> — where the provider CRs live (default <code>mtv_namespace</code>).</p>
+</li>
+<li>
+<p><code>network_map_namespace</code> / <code>storage_map_namespace</code> — where the maps live (must match Create maps).</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="title">wave.yml</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">mtv_plans_migration_request:
+  source: vcenter-prod
+  source_namespace: openshift-mtv
+  destination: host
+  destination_namespace: openshift-mtv
+  target_namespace: rhdp-migrations
+  network_map: vcenter-prod-host
+  network_map_namespace: rhdp-migrations
+  storage_map: vcenter-prod-host
+  storage_map_namespace: rhdp-migrations
+  verify_plans_ready: true
+  plan_name: wave-app-tier
+  vms:
+    - name: db-server-01
+    - name: app-server-02</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>If you omit <code>plan_name</code>, the role names the plan <code>&lt;source&gt;-&lt;destination&gt;-yyyyMMdd-HHmm</code>.</p>
+</div>
+<div class="paragraph">
+<p>Each VM entry can use <code>name</code>, <code>id</code> (MOID), or <code>path</code> (VMware path such as <code>/&lt;datacenter&gt;/vm/&lt;folder&gt;/&lt;name&gt;</code>). Set <code>exclude: true</code> to drop a VM from the wave. Per-VM <code>overrides</code> win over <code>vm_overrides</code> and folder <code>overrides</code>.</p>
+</div>
+<div class="sect2">
+<h3 id="preview-without-applying"><a class="anchor" href="#preview-without-applying"></a>Preview without applying</h3>
+<div class="paragraph">
+<p>Set <code>dry_run: true</code>. The role builds the Plan manifests, prints them, and does not create CRs on the cluster.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="folders-and-exclusions"><a class="anchor" href="#folders-and-exclusions"></a>Folders and exclusions</h3>
+<div class="paragraph">
+<p><code>folders</code> is for VMware folders (and their subfolders). Combine with <code>vms</code> that have <code>exclude: true</code> to skip a machine in that folder.</p>
+</div>
+<div class="listingblock">
+<div class="title">wave.yml</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">mtv_plans_migration_request:
+  source: vcenter-prod
+  folders:
+    - name: production-workloads
+  vms:
+    - name: legacy-vm-do-not-migrate
+      exclude: true</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>If two folders share a name, set <code>id</code> (MOID) or <code>path</code> so the role picks the right one. <code>exclude: true</code> on a folder drops that folder and its subfolders.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="split-a-large-wave"><a class="anchor" href="#split-a-large-wave"></a>Split a large wave</h3>
+<div class="listingblock">
+<div class="title">wave.yml</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">mtv_plans_migration_request:
+  source: vcenter-prod
+  split_plans: true
+  vms_per_plan: 5
+  folders:
+    - name: datacenter-workloads</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><code>vms_per_plan</code> must be a positive integer when <code>split_plans</code> is <code>true</code>.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="cold-or-warm"><a class="anchor" href="#cold-or-warm"></a>Cold or warm</h3>
+<div class="paragraph">
+<p><code>type</code> is <code>cold</code> (default) or <code>warm</code>. Warm plans copy disks while the source VM stays up; cutover is still <a href="execute-migration.html" class="xref page">Execute the migration</a>. Set <code>verify_plans_ready: true</code> if you want the role to wait until each Plan is <strong>Ready</strong> before it returns.</p>
+</div>
+<div class="paragraph">
+<p><code>plan_overrides</code> applies at Plan level. <code>vm_overrides</code> applies to every VM unless a VM or folder override replaces it. Field lists: <a href="https://github.com/redhat-cop/openshift_virtualization_migration/blob/v2/roles/mtv_plans/README.md">mtv_plans README</a>.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="create-plans-from-the-cli"><a class="anchor" href="#create-plans-from-the-cli"></a>Create plans from the CLI</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>From the directory that holds your inventory:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">ansible-navigator run \
+  --pp=missing \
+  --eei=quay.io/redhat-cop/openshift-virtualization-migration-ee:latest \
+  -m stdout \
+  --pae=false \
+  --senv=K8S_AUTH_HOST=$(oc whoami --show-server) \
+  --senv=K8S_AUTH_VERIFY_SSL=false \
+  --senv=K8S_AUTH_API_KEY=$(oc whoami -t) \
+  infra.openshift_virtualization_migration.vmf_mtv_plans \
+  -i &lt;inventory&gt; \
+  --limit &lt;openshift-host&gt; \
+  --extra-vars "@wave.yml"</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><code>--limit</code> is the <code>migration_clusters</code> host (for example <code>ocp-prod</code>). Skip it only when that group has a single host.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="create-plans-with-aap"><a class="anchor" href="#create-plans-with-aap"></a>Create plans with AAP</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>After seed, AAP has the template <strong>OpenShift Virtualization Migration - MTV Plans</strong> (<code>playbooks/vmf_mtv_plans.yml</code>).</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>In AAP, open <strong>Templates</strong> under <strong>Automation Execution</strong>.</p>
+</li>
+<li>
+<p>Launch <strong>OpenShift Virtualization Migration - MTV Plans</strong>.</p>
+</li>
+<li>
+<p>Survey: <strong>Source Name</strong> and <strong>Target Name</strong> (inventory host names, same as <code>source_name</code> / <code>target_name</code>).</p>
+</li>
+<li>
+<p>Extra vars: the <code>mtv_plans_migration_request</code> from <code>wave.yml</code>. Set <code>source</code> to the MTV provider name, not a different string than Create providers used.</p>
+</li>
+<li>
+<p>If the inventory has several OpenShift hosts, limit the job to the destination host.</p>
+</li>
+<li>
+<p>Attach the OpenShift credential for the target cluster if the template asks for credentials.</p>
+</li>
+<li>
+<p>Launch and wait for success.</p>
+</li>
+</ol>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="confirm-the-plans"><a class="anchor" href="#confirm-the-plans"></a>Confirm the plans</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>In the OpenShift web console: <strong>Migration</strong> → <strong>Plans for virtualization</strong>. Select the project where the plans were created (<code>openshift-mtv</code> unless you set <code>migration_namespace</code>). Status <strong>Ready</strong>.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../guides/rhdp/_images/openshift-mtv-plans.png" alt="MTV Plans">
+</div>
+</div>
+<div class="paragraph">
+<p>Open a plan and use the <strong>Virtual Machines</strong> tab to confirm the wave membership. Do not start the plan here.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>If the project does not appear, select <strong>Show default projects</strong> so names that start with <code>openshift</code> are listed.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="if-plan-creation-fails"><a class="anchor" href="#if-plan-creation-fails"></a>If plan creation fails</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p><code>mtv_plans_migration_request</code> empty, or neither <code>vms</code> nor <code>folders</code> — the role asserts and stops.</p>
+</li>
+<li>
+<p>Source or destination provider missing — <code>source</code> / <code>destination</code> must match the MTV provider names from <a href="create-providers.html" class="xref page">Create providers</a> (defaults <code>vmware</code> / <code>host</code> only if you never changed them).</p>
+</li>
+<li>
+<p>StorageMap or NetworkMap missing — names and namespaces must match <a href="create-maps.html" class="xref page">Create maps</a>.</p>
+</li>
+<li>
+<p><code>split_plans: true</code> with a non-positive <code>vms_per_plan</code> — set a positive integer.</p>
+</li>
+<li>
+<p>Several clusters in <code>migration_clusters</code> and no limit — the playbook runs on every cluster in the group; limit to the destination host.</p>
+</li>
+<li>
+<p><code>dry_run: true</code> — no CRs on the cluster; that is expected. Set it to <code>false</code> (or omit it) to apply.</p>
+</li>
+<li>
+<p>Plan never reaches <strong>Ready</strong> — maps, providers, or VM names are wrong; fix those rather than starting a migration.</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="when-you-are-done"><a class="anchor" href="#when-you-are-done"></a>When you are done</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>MTV has Plan CRs for this wave. They are not running. Continue to <a href="execute-migration.html" class="xref page">Execute the migration</a>.</p>
+</div>
+</div>
 </div>
 <nav class="pagination">
   <span class="prev"><a href="create-maps.html" class="query-params-link">Create maps</a></span>

@@ -107,67 +107,7 @@
     <span class="nav-text">Look up an Ansible role</span>
 <ul class="nav-list">
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="../roles/aap_cleanup.html">aap_cleanup</a>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="../roles/aap_deploy.html">aap_deploy</a>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="../roles/aap_machine_credentials.html">aap_machine_credentials</a>
-  </li>
-  <li class="nav-item" data-depth="2">
     <a class="nav-link" href="../roles/aap_seed.html">aap_seed</a>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="../roles/bootstrap.html">bootstrap</a>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="../roles/cluster_healthcheck.html">cluster_healthcheck</a>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="../roles/create_mf_aap_token.html">create_mf_aap_token</a>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="../roles/mtv_management.html">mtv_management</a>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="../roles/mtv_migrate.html">mtv_migrate</a>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="../roles/network_mgmt.html">network_mgmt</a>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="../roles/ocp_cleanup.html">ocp_cleanup</a>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="../roles/operator_management.html">operator_management</a>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="../roles/validate_migration.html">validate_migration</a>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="../roles/vm_backup_restore.html">vm_backup_restore</a>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="../roles/vm_collect.html">vm_collect</a>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="../roles/vm_hot_plug.html">vm_hot_plug</a>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="../roles/vm_lifecycle.html">vm_lifecycle</a>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="../roles/vm_mac_address.html">vm_mac_address</a>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="../roles/vm_networking.html">vm_networking</a>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="../roles/vm_patching.html">vm_patching</a>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="../roles/vm_ssh.html">vm_ssh</a>
   </li>
   <li class="nav-item" data-depth="2">
     <a class="nav-link" href="../roles/mtv_hook_invoke_aap.html">mtv_hook_invoke_aap</a>
@@ -240,7 +180,24 @@
 <p>Deploy Ansible Automation Platform onto the OpenShift cluster you already have, then add Migration Factory. These docs do not cover installing OpenShift.</p>
 </div>
 <div class="paragraph">
-<p>This page is a stub for the v2 navigation preview. Content will follow tester feedback.</p>
+<p>The collection v2 playbook is <code>utility_aap_deploy</code> (<code>playbooks/utility_aap_deploy.yml</code>). It runs the <code>utility_aap_deploy</code> role against <code>migration_clusters</code>. It installs AAP; it does <strong>not</strong> seed Migration Factory content. After AAP is up, put its API URL and credentials in <code>migration_aap</code> and continue to <a href="configure-inventory.html" class="xref page">Configure inventory for your environment</a> and <a href="seed-aap.html" class="xref page">Seed Migration Factory into AAP</a>.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">ansible-navigator run \
+  --pp=missing \
+  --eei=quay.io/redhat-cop/openshift-virtualization-migration-ee:latest \
+  -m stdout \
+  --pae=false \
+  --senv=K8S_AUTH_HOST=$(oc whoami --show-server) \
+  --senv=K8S_AUTH_VERIFY_SSL=false \
+  --senv=K8S_AUTH_API_KEY=$(oc whoami -t) \
+  infra.openshift_virtualization_migration.utility_aap_deploy \
+  -i &lt;inventory&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Pass an entitlement manifest with <code>utility_aap_deploy_aap_license_manifest</code> when the operator needs a subscription zip. Internals: <a href="../roles/utility_aap_deploy.html" class="xref page">utility_aap_deploy</a>.</p>
 </div>
 <nav class="pagination">
   <span class="prev"><a href="setup-rhdp.html" class="query-params-link">Red Hat Demo Platform</a></span>

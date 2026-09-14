@@ -107,67 +107,7 @@
     <span class="nav-text">Look up an Ansible role</span>
 <ul class="nav-list">
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="../roles/aap_cleanup.html">aap_cleanup</a>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="../roles/aap_deploy.html">aap_deploy</a>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="../roles/aap_machine_credentials.html">aap_machine_credentials</a>
-  </li>
-  <li class="nav-item" data-depth="2">
     <a class="nav-link" href="../roles/aap_seed.html">aap_seed</a>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="../roles/bootstrap.html">bootstrap</a>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="../roles/cluster_healthcheck.html">cluster_healthcheck</a>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="../roles/create_mf_aap_token.html">create_mf_aap_token</a>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="../roles/mtv_management.html">mtv_management</a>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="../roles/mtv_migrate.html">mtv_migrate</a>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="../roles/network_mgmt.html">network_mgmt</a>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="../roles/ocp_cleanup.html">ocp_cleanup</a>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="../roles/operator_management.html">operator_management</a>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="../roles/validate_migration.html">validate_migration</a>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="../roles/vm_backup_restore.html">vm_backup_restore</a>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="../roles/vm_collect.html">vm_collect</a>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="../roles/vm_hot_plug.html">vm_hot_plug</a>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="../roles/vm_lifecycle.html">vm_lifecycle</a>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="../roles/vm_mac_address.html">vm_mac_address</a>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="../roles/vm_networking.html">vm_networking</a>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="../roles/vm_patching.html">vm_patching</a>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="../roles/vm_ssh.html">vm_ssh</a>
   </li>
   <li class="nav-item" data-depth="2">
     <a class="nav-link" href="../roles/mtv_hook_invoke_aap.html">mtv_hook_invoke_aap</a>
@@ -239,26 +179,16 @@
 <div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
-<p>Register the source hypervisor with Migration Toolkit for Virtualization so later steps can map networks and storage and run a wave. Seed must already have succeeded (<a href="seed-aap.html" class="xref page">Seed Migration Factory into AAP</a>).</p>
+<p>Register the source hypervisor with Migration Toolkit for Virtualization on the destination OpenShift cluster so maps and plans can use it. Seed must already have succeeded (<a href="seed-aap.html" class="xref page">Seed Migration Factory into AAP</a>).</p>
 </div>
 <div class="paragraph">
-<p>When you are done, MTV shows a provider with a green check in the <code>openshift-mtv</code> namespace. Next is <a href="create-maps.html" class="xref page">Create maps</a>.</p>
+<p>When you are done, MTV shows a provider with a green check in the target&#8217;s <code>mtv_namespace</code> (usually <code>openshift-mtv</code>). Next is <a href="create-maps.html" class="xref page">Create maps</a>. Do not create maps until the provider is Ready.</p>
 </div>
 <div class="paragraph">
-<p>You can configure these MTV providers:</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>VMware, using the <a href="https://console.redhat.com/ansible/automation-hub/repo/validated/infra/openshift_virtualization_migration/content/playbook/mtv_provider_vmware.yml/"><code>mtv_provider_vmware</code></a> playbook.</p>
-</li>
-<li>
-<p>Red Hat Virtualization, using the <a href="https://console.redhat.com/ansible/automation-hub/repo/validated/infra/openshift_virtualization_migration/content/playbook/mtv_provider_ovirt.yml/"><code>mtv_provider_ovirt</code></a> playbook.</p>
-</li>
-</ul>
+<p>The collection v2 playbook is <code>vmf_mtv_provider</code>. It runs the <code>mtv_provider</code> role: one source–target pair per launch. Source type (<code>vmware</code> or <code>ovirt</code>) and connection details come from the <code>vm_sources</code> host. OpenShift connection comes from the AAP OpenShift credential (<code>K8S_AUTH_*</code>) or from the <code>migration_clusters</code> host. Internals: <a href="../roles/mtv_provider.html" class="xref page">mtv_provider</a>.</p>
 </div>
 <div class="paragraph">
-<p>The playbooks use the <code>mtv_management</code> role. After seed, the same work can run from AAP instead of <code>ansible-navigator</code>.</p>
+<p>If the target has several sources, launch once per pair (<code>source_name</code> + <code>target_name</code>).</p>
 </div>
 </div>
 </div>
@@ -268,68 +198,31 @@
 <div class="ulist">
 <ul>
 <li>
-<p>Logged in to the cluster over CLI with <code>oc login</code>.</p>
+<p>Logged in to the cluster over CLI with <code>oc login</code> if you run from the CLI.</p>
 </li>
 <li>
-<p>The cluster is ready for OpenShift Virtualization Migration (<a href="confirm-openshift-ready.html" class="xref page">Confirm OpenShift is ready</a>).</p>
+<p>The cluster is ready (<a href="confirm-openshift-ready.html" class="xref page">Confirm OpenShift is ready</a>).</p>
 </li>
 <li>
-<p>Inventory matches the environment (<a href="configure-inventory.html" class="xref page">Configure inventory for your environment</a>).</p>
+<p>Inventory matches collection v2 (<a href="configure-inventory.html" class="xref page">Configure inventory for your environment</a>).</p>
+</li>
+<li>
+<p>Seed created the <strong>OpenShift Virtualization Migration - MTV Provider</strong> template.</p>
 </li>
 </ul>
 </div>
-<div class="sect2">
-<h3 id="required-variables"><a class="anchor" href="#required-variables"></a>Required variables</h3>
+<div class="paragraph">
+<p>Required extra vars (AAP survey after seed):</p>
+</div>
 <div class="ulist">
 <ul>
 <li>
-<p><strong>mtv_management_migration_targets (Required)</strong>: details about the VMware or RHV environment.</p>
+<p><code>source_name</code> — inventory host in <code>vm_sources</code>.</p>
+</li>
+<li>
+<p><code>target_name</code> — inventory host in <code>migration_clusters</code>. That host&#8217;s <code>vm_sources</code> list must include <code>source_name</code>.</p>
 </li>
 </ul>
-</div>
-<div class="paragraph">
-<p>The following example configures a VMware provider in a <code>var.yml</code> file:</p>
-</div>
-<div class="listingblock">
-<div class="title">var.yml</div>
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">mtv_management_migration_targets:
-- name: vmware-2w7dj
-  type: vmware
-  host: vcsrs00-vc.infra.demo.redhat.com
-  username: ocpvirt-2w7dj-user1@infra
-  password: &lt;VCENTER-PASSWORD&gt;
-  vddk:
-  image: quay.io/redhat-cop/openshift-virtualization-migration-vddk:latest #this VDDK image is for demo purposes only. Must NOT be distributed externally.
-  username: "{{ container_username }}"
-  password: "{{ container_password }}"
-  sdkEndpoint: /sdk
-  insecureSkipTlsVerify: true
-  mapping:
-    create: true</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>The following example configures a RHV provider in a <code>var.yml</code> file:</p>
-</div>
-<div class="listingblock">
-<div class="title">var.yml</div>
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">mtv_management_migration_targets:
-- name: rhev-target-1 # Required
-  type: ovirt
-  host: rhev.infra.demo.redhat.com
-  username: admin@internal
-  sdkEndpoint: /ovirt-engine/api #if not provided automatically will be added
-  password: &lt;RHEV-PASSWORD&gt;
-  insecureSkipTlsVerify: true
-  mapping:
-    create: true</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>These values should match the VMware or RHV connection you already described in the inventory.</p>
-</div>
 </div>
 </div>
 </div>
@@ -338,50 +231,57 @@
 <div class="sectionbody">
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">ansible-navigator run --eei=quay.io/redhat-cop/openshift-virtualization-migration-ee:latest --pp=missing -m stdout --pae=false --senv=K8S_AUTH_HOST=$(oc whoami --show-server) --senv=K8S_AUTH_VERIFY_SSL=false --senv=K8S_AUTH_API_KEY=$(oc whoami -t) infra.openshift_virtualization_migration.mtv_provider_vmware -e openshift_api_key=$(oc whoami -t) -i &lt;inventory&gt; --extra-vars "@var.yml"</code></pre>
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">ansible-navigator run \
+  --pp=missing \
+  --eei=quay.io/redhat-cop/openshift-virtualization-migration-ee:latest \
+  -m stdout \
+  --pae=false \
+  --senv=K8S_AUTH_HOST=$(oc whoami --show-server) \
+  --senv=K8S_AUTH_VERIFY_SSL=false \
+  --senv=K8S_AUTH_API_KEY=$(oc whoami -t) \
+  infra.openshift_virtualization_migration.vmf_mtv_provider \
+  -i &lt;inventory&gt; \
+  -e source_name=&lt;source-host&gt; \
+  -e target_name=&lt;openshift-host&gt;</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Use <code>mtv_provider_ovirt</code> instead of <code>mtv_provider_vmware</code> when the source is RHV.</p>
+<p>The role reads <code>type</code>, <code>host</code>, <code>sdk_endpoint</code>, and VDDK from the source host. Username and password come from that host in the inventory (CLI) or from the <strong>Migration Factory - Source Environment</strong> credential (AAP).</p>
+</div>
+<div class="paragraph">
+<p>Optional: <code>mtv_provider_provider_namespace</code> if the provider must not land in <code>openshift-mtv</code>. Set <code>mtv_provider_provider_state: absent</code> to remove a provider and its secret.</p>
 </div>
 </div>
 </div>
 <div class="sect1">
 <h2 id="create-providers-with-aap"><a class="anchor" href="#create-providers-with-aap"></a>Create providers with AAP</h2>
 <div class="sectionbody">
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>In AAP, open <strong>Templates</strong> under <strong>Automation Execution</strong>.</p>
+</li>
+<li>
+<p>Launch <strong>OpenShift Virtualization Migration - MTV Provider</strong>.</p>
+</li>
+<li>
+<p>Survey: <strong>Source Name</strong> and <strong>Target Name</strong> (the inventory host names).</p>
+</li>
+<li>
+<p>Attach the OpenShift credential for the target cluster if the template asks for credentials.</p>
+</li>
+<li>
+<p>Launch and wait until the Provider CR is Ready (the role waits by default).</p>
+</li>
+</ol>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="confirm-the-provider"><a class="anchor" href="#confirm-the-provider"></a>Confirm the provider</h2>
+<div class="sectionbody">
 <div class="paragraph">
-<p>After seed, AAP has the workflow that registers MTV providers.</p>
-</div>
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p>In AAP, open <strong>Templates</strong> under <strong>Automation Execution</strong> and launch <strong>Configure OpenShift Virtualization Migration</strong> (rocket icon).</p>
-</li>
-</ol>
-</div>
-<div class="imageblock">
-<div class="content">
-<img src="../../guides/rhdp/_images/aap-launch-virtualization-migration-workflow.png" alt="Launch the Configure OpenShift Virtualization Migration Workflow Job Template">
-</div>
-</div>
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p>Wait until the Target Configuration node succeeds.</p>
-</li>
-</ol>
-</div>
-<div class="imageblock">
-<div class="content">
-<img src="../../guides/rhdp/_images/aap-workflow-configure-target.png" alt="Configure Migration Target Workflow">
-</div>
-</div>
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p>In the OpenShift web console, open <strong>Migration</strong> → <strong>Providers for virtualization</strong>. The provider is in the <code>openshift-mtv</code> namespace. A green check means the connection is valid.</p>
-</li>
-</ol>
+<p>In the OpenShift web console: <strong>Migration</strong> → <strong>Providers for virtualization</strong>. Select the <code>mtv_namespace</code> project. A green check means the connection is valid.</p>
 </div>
 <div class="imageblock">
 <div class="content">
@@ -403,7 +303,28 @@
 </table>
 </div>
 <div class="paragraph">
-<p>Confirm a Secret for the VDDK image exists in <code>openshift-mtv</code> (<strong>Workloads</strong> → <strong>Secrets</strong>). Do not use this page to create NetworkMaps or StorageMaps; that is <a href="create-maps.html" class="xref page">Create maps</a>.</p>
+<p>For VMware with a VDDK image, confirm the VDDK secret exists in that namespace (<strong>Workloads</strong> → <strong>Secrets</strong>). Do not create NetworkMaps or StorageMaps here; that is <a href="create-maps.html" class="xref page">Create maps</a>.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="if-provider-creation-fails"><a class="anchor" href="#if-provider-creation-fails"></a>If provider creation fails</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p><code>source_name</code> or <code>target_name</code> missing, or not in inventory — use the same host names as in <code>vm_sources</code> / <code>migration_clusters</code>.</p>
+</li>
+<li>
+<p>Source not in the target&#8217;s <code>vm_sources</code> list — fix the inventory.</p>
+</li>
+<li>
+<p>Forklift Provider CRD missing — MTV is not installed; see <a href="confirm-openshift-ready.html" class="xref page">Confirm OpenShift is ready</a>.</p>
+</li>
+<li>
+<p>Source credentials missing — on CLI they live on the <code>vm_sources</code> host; in AAP they come from the source credential type seed created.</p>
+</li>
+</ul>
 </div>
 </div>
 </div>
@@ -411,7 +332,7 @@
 <h2 id="when-you-are-done"><a class="anchor" href="#when-you-are-done"></a>When you are done</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>MTV has a provider for the source hypervisor. Continue to <a href="create-maps.html" class="xref page">Create maps</a>.</p>
+<p>MTV has a provider for this source on the destination cluster. Continue to <a href="create-maps.html" class="xref page">Create maps</a>.</p>
 </div>
 </div>
 </div>

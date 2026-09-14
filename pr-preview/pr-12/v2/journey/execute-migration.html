@@ -107,67 +107,7 @@
     <span class="nav-text">Look up an Ansible role</span>
 <ul class="nav-list">
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="../roles/aap_cleanup.html">aap_cleanup</a>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="../roles/aap_deploy.html">aap_deploy</a>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="../roles/aap_machine_credentials.html">aap_machine_credentials</a>
-  </li>
-  <li class="nav-item" data-depth="2">
     <a class="nav-link" href="../roles/aap_seed.html">aap_seed</a>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="../roles/bootstrap.html">bootstrap</a>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="../roles/cluster_healthcheck.html">cluster_healthcheck</a>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="../roles/create_mf_aap_token.html">create_mf_aap_token</a>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="../roles/mtv_management.html">mtv_management</a>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="../roles/mtv_migrate.html">mtv_migrate</a>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="../roles/network_mgmt.html">network_mgmt</a>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="../roles/ocp_cleanup.html">ocp_cleanup</a>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="../roles/operator_management.html">operator_management</a>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="../roles/validate_migration.html">validate_migration</a>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="../roles/vm_backup_restore.html">vm_backup_restore</a>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="../roles/vm_collect.html">vm_collect</a>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="../roles/vm_hot_plug.html">vm_hot_plug</a>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="../roles/vm_lifecycle.html">vm_lifecycle</a>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="../roles/vm_mac_address.html">vm_mac_address</a>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="../roles/vm_networking.html">vm_networking</a>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="../roles/vm_patching.html">vm_patching</a>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="../roles/vm_ssh.html">vm_ssh</a>
   </li>
   <li class="nav-item" data-depth="2">
     <a class="nav-link" href="../roles/mtv_hook_invoke_aap.html">mtv_hook_invoke_aap</a>
@@ -236,14 +176,139 @@
   <div class="content">
 <article class="doc">
 <h1 class="page">Execute the migration</h1>
+<div id="preamble">
+<div class="sectionbody">
 <div class="paragraph">
-<p>Create the plan and run the migration. The procedure currently lives in the fused migrate article until that page is split.</p>
+<p>Start the Plan custom resources from <a href="prepare-migration-wave.html" class="xref page">Prepare a migration wave</a> so MTV copies the VMs to OpenShift.</p>
 </div>
 <div class="paragraph">
-<p>The procedure for this station currently lives in the fused migrate article until that page is split.</p>
+<p>When you are done, the plan status is <strong>Running</strong>, then <strong>Succeeded</strong>. Next is <a href="verify-migration.html" class="xref page">Verify the migration</a>. Creating a plan does not start it.</p>
 </div>
 <div class="paragraph">
-<p><a href="../../guides/ansible-playbooks/migration/mtv_migrate.html" class="xref page">Migrate Virtual Machines</a></p>
+<p>Collection <code>v2</code> does <strong>not</strong> start migrations from Ansible. The seeded AAP template <strong>OpenShift Virtualization Migration - Migrate</strong> (<code>playbooks/vmf_migrate.yml</code>) is a placeholder: it prints <code>source_name</code> and <code>target_name</code> and exits. There is no <code>mtv_migrate</code> role on the <code>v2</code> branch. Do not launch that template expecting disks to move.</p>
+</div>
+<div class="paragraph">
+<p>Start each Ready plan in the OpenShift web console (MTV). That is the path that creates the Migration resources and runs the wave.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="prerequisites"><a class="anchor" href="#prerequisites"></a>Prerequisites</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p>Plans for this wave exist and show <strong>Ready</strong> (<a href="prepare-migration-wave.html" class="xref page">Prepare a migration wave</a>).</p>
+</li>
+<li>
+<p>You can open the destination cluster in the OpenShift web console with permission to use MTV (<strong>Migration</strong> menu).</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>If a plan is not Ready, go back to the wave page. Do not start it.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="start-the-plan-in-the-console"><a class="anchor" href="#start-the-plan-in-the-console"></a>Start the plan in the console</h2>
+<div class="sectionbody">
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>In the OpenShift web console: <strong>Migration</strong> → <strong>Plans for virtualization</strong>.</p>
+</li>
+<li>
+<p>Select the project where the plans were created (<code>openshift-mtv</code> unless you set <code>migration_namespace</code> on the wave).</p>
+</li>
+<li>
+<p>Confirm the plan status is <strong>Ready</strong>.</p>
+</li>
+<li>
+<p>Click <strong>Start</strong> beside the plan, then <strong>Start</strong> in the confirmation window.</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>The plan status becomes <strong>Running</strong>. Open the plan and use the <strong>Virtual Machines</strong> tab for disk transfer and pipeline status.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../guides/rhdp/_images/openshift-mtv-plan-virtual-machines.png" alt="MTV plan virtual machines while running">
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>If the project does not appear, select <strong>Show default projects</strong> so names that start with <code>openshift</code> are listed.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>If you used <code>split_plans</code>, start each Plan CR in the wave. They are independent.</p>
+</div>
+<div class="sect2">
+<h3 id="warm-plans"><a class="anchor" href="#warm-plans"></a>Warm plans</h3>
+<div class="paragraph">
+<p><code>type: warm</code> on the wave means <strong>Start</strong> begins precopy while the source VM stays up. Cutover is a later action: on <strong>Plans for virtualization</strong>, open the plan&#8217;s options menu and choose <strong>Cutover</strong> when you are ready to switch. Cold plans (<code>type: cold</code>, the default) finish in the same run as <strong>Start</strong>.</p>
+</div>
+<div class="paragraph">
+<p>MTV console details: <a href="https://docs.redhat.com/en/documentation/migration_toolkit_for_virtualization/">Migration Toolkit for Virtualization documentation</a>.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="the-aap-migrate-template"><a class="anchor" href="#the-aap-migrate-template"></a>The AAP Migrate template</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>After seed, AAP still has <strong>OpenShift Virtualization Migration - Migrate</strong>. Launching it succeeds and logs the survey values. It does not create a Migration CR, does not call <code>mtv_plans</code>, and does not wait for VMs.</p>
+</div>
+<div class="paragraph">
+<p>Use that template only to confirm seed created it. Use the console steps above to run the wave.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="if-the-run-does-not-start"><a class="anchor" href="#if-the-run-does-not-start"></a>If the run does not start</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p>Plan not <strong>Ready</strong> — maps, providers, or VM names; fix on <a href="prepare-migration-wave.html" class="xref page">Prepare a migration wave</a>.</p>
+</li>
+<li>
+<p><strong>Start</strong> missing or disabled — the plan is already running, archived, or not Ready.</p>
+</li>
+<li>
+<p>AAP <strong>Migrate</strong> job is green but nothing moves — expected for <code>vmf_migrate.yml</code> on collection <code>v2</code>.</p>
+</li>
+<li>
+<p>Warm plan stays in precopy — <strong>Start</strong> did its job; use <strong>Cutover</strong> when you intend to switch.</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="when-you-are-done"><a class="anchor" href="#when-you-are-done"></a>When you are done</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The plan shows <strong>Succeeded</strong> (or is still <strong>Running</strong> while disks copy). Migrated VMs are typically powered off until you start them. Continue to <a href="verify-migration.html" class="xref page">Verify the migration</a>.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../guides/rhdp/_images/openshift-mtv-completed-plan.png" alt="MTV plan succeeded">
+</div>
+</div>
+</div>
 </div>
 <nav class="pagination">
   <span class="prev"><a href="prepare-migration-wave.html" class="query-params-link">Prepare a migration wave</a></span>
