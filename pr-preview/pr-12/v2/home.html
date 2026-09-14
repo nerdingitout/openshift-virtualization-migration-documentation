@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Migration Factory V2 :: Ansible for OpenShift Virtualization Migration Documentation</title>
+    <title>Ansible for OpenShift Virtualization Migration :: Ansible for OpenShift Virtualization Migration Documentation</title>
     <link rel="prev" href="index.html">
     <link rel="next" href="journey/confirm-openshift-ready.html">
     <meta name="generator" content="Antora 3.1.15">
@@ -174,15 +174,72 @@
 </div>
   <div class="content">
 <article class="doc">
-<h1 class="page">Migration Factory V2</h1>
+<h1 class="page">Ansible for OpenShift Virtualization Migration</h1>
+<div id="preamble">
+<div class="sectionbody">
 <div class="paragraph">
-<p>Start in the left nav: confirm OpenShift is ready, get AAP ready, configure inventory, seed Migration Factory into AAP, then run a migration.</p>
+<p>Ansible for OpenShift Virtualization Migration (<strong>Migration Factory</strong>) is a set of Ansible playbooks with deep integration into Ansible Automation Platform (AAP). It automates moving virtual machines from existing hypervisors onto Red Hat OpenShift Virtualization, and it supports day-2 operations of those VMs on the platform.</p>
 </div>
 <div class="paragraph">
-<p>The current published documentation (playbooks, RHDP workshop, prerequisites) is still at <a href="../guides/home.html" class="xref page">Development Guides (v1)</a>. Both sites ship from the same GitHub Pages deploy.</p>
+<p>These pages describe the collection <code>v2</code> branch. Start in the left nav after you read this introduction, or go directly to <a href="journey/confirm-openshift-ready.html" class="xref page">Confirm OpenShift is ready</a>.</p>
 </div>
 <div class="paragraph">
-<p>Use <a href="journey/confirm-openshift-ready.html" class="xref page">Confirm OpenShift is ready</a> to begin.</p>
+<p>The current published workshop, playbooks, and prerequisites remain at <a href="../guides/home.html" class="xref page">Development Guides (v1)</a>. Both sites ship from the same GitHub Pages deploy.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="overview"><a class="anchor" href="#overview"></a>Overview</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Migration Factory is built so you can use OpenShift Virtualization at scale: assess the source estate, run the migration with Migration Toolkit for Virtualization (MTV), and keep managing VMs after they land.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../guides/_images/mf-overview.png" alt="Accelerating migrations at scale with Ansible Automation Platform">
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="ansible-collection"><a class="anchor" href="#ansible-collection"></a>Ansible collection</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The Ansible collection is the content that drives that journey: from existing hypervisors to OpenShift Virtualization, using AAP. It also includes content for managing VM workloads after they run on OpenShift Virtualization.</p>
+</div>
+<div class="paragraph">
+<p>The project publishes two validated collections on Automation Hub:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://console.redhat.com/ansible/automation-hub/collections/validated/infra/openshift_virtualization_migration/details/">OpenShift Virtualization Migration</a></p>
+</li>
+<li>
+<p><a href="https://console.redhat.com/ansible/automation-hub/collections/validated/infra/openshift_virtualization_ops/details/">OpenShift Virtualization Operations</a></p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>This documentation follows the Migration collection on the <a href="https://github.com/redhat-cop/openshift_virtualization_migration/tree/v2"><code>v2</code> branch</a>. Playbooks, inventory groups, and role names in the left nav match that branch, not <code>main</code>.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="find-us-on-the-source"><a class="anchor" href="#find-us-on-the-source"></a>Find us on the Source</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Stay up to date with the solution. The download link for the collection, documentation, and related resources are on the Source page (<a href="https://red.ht/migration-factory">red.ht/migration-factory</a>).</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="use-cases-request"><a class="anchor" href="#use-cases-request"></a>Use Cases Request</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Use the <a href="https://docs.google.com/forms/d/e/1FAIpQLSfKQzd1eQomLCkj3yrfTUFNaon4gfP-TwqWtEp0U6mhk0_nVA/viewform">form</a> to submit real-world examples where the collection is (or could be) applied.</p>
+</div>
+</div>
 </div>
 <nav class="pagination">
   <span class="prev"><a href="index.html" class="query-params-link">Migration Factory V2</a></span>
