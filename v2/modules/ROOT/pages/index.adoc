@@ -1,4 +1,5 @@
 = Ansible for OpenShift Virtualization Migration
+:page-aliases: home.adoc
 
 Ansible for OpenShift Virtualization Migration (**Migration Factory**) is a set of Ansible playbooks with deep integration into Ansible Automation Platform (AAP). It automates moving virtual machines from existing hypervisors onto Red Hat OpenShift Virtualization, and it supports day-2 operations of those VMs on the platform.
 
