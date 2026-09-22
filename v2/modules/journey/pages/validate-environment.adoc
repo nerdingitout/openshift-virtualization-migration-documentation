@@ -22,6 +22,6 @@ Confirm the pieces from *Preparing your environment* before you seed. Do this in
 | Quay pull works for the EE image (AAP registry credential, or `podman login` if you still seed from a laptop).
 |===
 
-If any row fails, fix that page in *Preparing your environment*. Do not seed to paper over a missing operator.
+If any row fails, fix that check before you seed. Do not seed to paper over a missing operator.
 
-When every row is true, continue to xref:seed-aap.adoc[Seeding Ansible Automation Platform].
+When every row is true, xref:seed-aap.adoc[Seeding Ansible Automation Platform].

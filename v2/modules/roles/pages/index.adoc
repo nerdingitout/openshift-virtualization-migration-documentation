@@ -1,6 +1,6 @@
 = Automation reference
 
-These are the roles on the collection `v2` branch. After seed, you run them as AAP job templates. Argument lists live in each role's README on GitHub (linked from the role page). Dynamic import of those READMEs into this site is not wired yet.
+After seed, you run these roles as AAP job templates.
 
 [cols="1,2"]
 |===
@@ -31,4 +31,4 @@ These are the roles on the collection `v2` branch. After seed, you run them as A
 | Create a long-lived OpenShift service account token for AAP.
 |===
 
-There is no `mtv_migrate` role on `v2`. The seeded **Migrate** template is a placeholder (xref:journey:execute-migration.adoc[Migrating VMs]).
+The seeded **Migrate** template does not start migrations. Start plans in the OpenShift console; see xref:journey:execute-migration.adoc[Migrating VMs].

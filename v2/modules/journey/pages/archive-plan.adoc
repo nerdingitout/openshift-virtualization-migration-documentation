@@ -2,9 +2,9 @@
 
 Mark a finished migration plan archived in MTV so its logs and history go away and it cannot be started again. Close the wave first (xref:close-migration-wave.adoc[Closing the migration wave]). Do not archive a plan you still need to restart or debug.
 
-When you are done, the plan is archived. The migrated VMs stay in `target_namespace`. Next is xref:scaling-the-automation.adoc[Updating the topology] if you are adding sources or clusters.
+When you are done, the plan is archived. The migrated VMs stay in `target_namespace`.
 
-Collection `v2` has no archive playbook. Archive is an MTV action on the Plan CR that `mtv_plans` created. Use the OpenShift web console.
+There is no archive playbook. Archive is an MTV action on the Plan CR that `mtv_plans` created. Use the OpenShift web console.
 
 == What archive does
 
@@ -58,4 +58,4 @@ MTV plan options: link:https://docs.redhat.com/en/documentation/migration_toolki
 
 == When you are done
 
-The plan is archived (and optionally deleted). Workloads remain on OpenShift Virtualization. Continue to xref:scaling-the-automation.adoc[Updating the topology] if you are repeating this path across more sources or clusters.
+The plan is archived (and optionally deleted). Workloads remain on OpenShift Virtualization.

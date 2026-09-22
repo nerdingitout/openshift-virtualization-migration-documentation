@@ -2,9 +2,9 @@
 
 Choose which VMs (or source folders) move together, attach the maps you already created, and let MTV create **Plan** custom resources. Maps must already exist (xref:create-maps.adoc[Configure storage and network maps]).
 
-When you are done, each plan shows **Ready**. Next is xref:execute-migration.adoc[Migrating VMs]. This page does **not** start a migration.
+When you are done, each plan shows **Ready**. This does **not** start a migration.
 
-Run this from **AAP**. The template is **OpenShift Virtualization Migration - MTV Plans** (`mtv_plans`). Internals: xref:roles:mtv_plans.adoc[mtv_plans].
+Run this from **AAP**. The template is **OpenShift Virtualization Migration - MTV Plans** (`mtv_plans`). See xref:roles:mtv_plans.adoc[mtv_plans].
 
 == What a wave is
 
@@ -20,7 +20,7 @@ A wave is one `mtv_plans_migration_request`: the VMs or folders in this sitting,
 * Seed succeeded (xref:seed-aap.adoc[Seeding Ansible Automation Platform]).
 * Providers are valid (xref:create-providers.adoc[Configure providers]).
 * StorageMaps and NetworkMaps for this pair are **Ready** (xref:create-maps.adoc[Configure storage and network maps]).
-* Inventory matches the collection layout: source hosts in `vm_sources`, OpenShift hosts in `migration_clusters`. See the link:https://github.com/redhat-cop/openshift_virtualization_migration/blob/v2/inventory/inventory-sample.yml[v2 inventory sample].
+* Inventory matches the collection layout: source hosts in `vm_sources`, OpenShift hosts in `migration_clusters`. See the link:https://github.com/redhat-cop/openshift_virtualization_migration/blob/v2/inventory/inventory-sample.yml[inventory sample].
 
 Required extra var:
 
@@ -144,4 +144,4 @@ If the project does not appear, select *Show default projects* so names that sta
 
 == When you are done
 
-MTV has Plan CRs for this wave. They are not running. Continue to xref:execute-migration.adoc[Migrating VMs].
+MTV has Plan CRs for this wave. They are not running.

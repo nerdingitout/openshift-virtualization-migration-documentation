@@ -2,9 +2,9 @@
 
 Confirm the wave actually landed: the plan finished, the VirtualMachine objects exist in the target project, and you can start them. Start from a **Succeeded** plan (xref:execute-migration.adoc[Migrating VMs]).
 
-When you are done, each VM in the wave is on OpenShift Virtualization in the namespace you set as `target_namespace`. Next is xref:close-migration-wave.adoc[Closing the migration wave].
+When you are done, each VM in the wave is on OpenShift Virtualization in the namespace you set as `target_namespace`.
 
-Collection `v2` has no verify playbook or `validate_migration` role. `mtv_plans` `verify_plans_ready` only waits until a plan is **Ready** before you start it. It does not wait for disks to copy. Check the result in the OpenShift web console (and with `oc` if you prefer).
+There is no verify playbook. `mtv_plans` `verify_plans_ready` only waits until a plan is **Ready** before you start it. It does not wait for disks to copy. Check the result in the OpenShift web console (and with `oc` if you prefer).
 
 == Prerequisites
 
@@ -58,4 +58,4 @@ oc get vm -n <target-namespace>
 
 == When you are done
 
-The plan is **Succeeded** and the VMs are in `target_namespace` (running if you started them). Continue to xref:close-migration-wave.adoc[Closing the migration wave].
+The plan is **Succeeded** and the VMs are in `target_namespace` (running if you started them).

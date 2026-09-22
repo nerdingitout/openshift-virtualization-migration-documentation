@@ -1,6 +1,6 @@
 = Migration Factory prerequisites
 
-Laptop tools for the few steps that still run outside AAP: first seed, and AAP install when you do not already have AAP. After seed, use AAP job templates. If someone else already seeded AAP, you do not need this page.
+Laptop tools for the steps that still run outside AAP: first seed, and AAP install when you do not already have AAP. After seed, use AAP job templates.
 
 Supported on Linux and macOS. Examples below are RHEL 9.
 
@@ -38,5 +38,3 @@ git clone https://github.com/redhat-cop/openshift_virtualization_migration.git
 cd openshift_virtualization_migration
 git checkout v2
 ----
-
-Next: xref:source-collection.adoc[Sourcing the collection and execution environment].

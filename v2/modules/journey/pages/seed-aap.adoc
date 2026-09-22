@@ -4,9 +4,9 @@ Bring Migration Factory into AAP: organization, project, inventory, credentials,
 
 Use the inventory from xref:configure-inventory.adoc[Building your inventory]. OpenShift already has Virtualization and MTV (xref:confirm-openshift-ready.adoc[OpenShift]). AAP is already running (xref:setup-aap-yourself.adoc[Ansible Automation Platform]). Do not seed until xref:validate-environment.adoc[Validate your environment] is true.
 
-When you are done, AAP shows the Migration Factory templates. Next is xref:run-a-migration.adoc[Introduction to migration waves]. Skip this page if AAP already has that content.
+When you are done, AAP shows the Migration Factory templates.
 
-The playbook is `vmf_seed_aap` (`aap_seed` role only). It does **not** install AAP. Internals: xref:roles:aap_seed.adoc[aap_seed].
+The playbook is `vmf_seed_aap` (`aap_seed` role only). It does **not** install AAP. See xref:roles:aap_seed.adoc[aap_seed].
 
 This is the last required laptop run. After it succeeds, use AAP.
 
@@ -32,7 +32,7 @@ After a successful run, AAP has at least:
 * **OpenShift Virtualization Migration - MTV Provider**
 * **OpenShift Virtualization Migration - MTV Maps**
 * **OpenShift Virtualization Migration - MTV Plans**
-* **OpenShift Virtualization Migration - Migrate** — placeholder on collection `v2`; it does not start VMs. See xref:execute-migration.adoc[Migrating VMs].
+* **OpenShift Virtualization Migration - Migrate** — does not start VMs. See xref:execute-migration.adoc[Migrating VMs].
 
 Surveys ask for `source_name` and `target_name` (inventory host names).
 
@@ -44,4 +44,4 @@ Surveys ask for `source_name` and `target_name` (inventory host names).
 
 == When you are done
 
-AAP holds the project, inventory, credentials, and templates. Continue to xref:run-a-migration.adoc[Introduction to migration waves].
+AAP holds the project, inventory, credentials, and templates.

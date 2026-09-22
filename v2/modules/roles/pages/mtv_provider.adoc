@@ -2,7 +2,7 @@
 
 Creates an MTV/Forklift source Provider CR and its secret on the destination OpenShift cluster for one source–target pair. Used from xref:journey:create-providers.adoc[Configure providers].
 
-Playbook: `infra.openshift_virtualization_migration.vmf_mtv_provider` (`playbooks/vmf_mtv_provider.yml` on the collection `v2` branch).
+Playbook: `infra.openshift_virtualization_migration.vmf_mtv_provider` (`playbooks/vmf_mtv_provider.yml`).
 
 Required extra vars: `source_name` (host in `vm_sources`) and `target_name` (host in `migration_clusters` whose `vm_sources` list includes the source). Launch once per pair. Source `type` is `vmware` or `ovirt`.
 

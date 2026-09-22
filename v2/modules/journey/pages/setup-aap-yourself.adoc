@@ -12,4 +12,4 @@ Put those values on the `migration_aap` host in xref:configure-inventory.adoc[Bu
 
 If AAP is not installed yet, use xref:setup-existing-ocp.adoc[Deploying Ansible Automation Platform], then return here with the new URL and admin password.
 
-Demonstration labs on Red Hat Demo Platform are xref:setup-rhdp.adoc[RHDP workshop], not this page.
+For a Red Hat Demo Platform lab, see xref:setup-rhdp.adoc[RHDP workshop].

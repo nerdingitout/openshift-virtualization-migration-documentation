@@ -19,9 +19,9 @@ Confirm you can reach every system Migration Factory talks to. You do not instal
 | Pull access to the Migration Factory EE on Quay (`quay.io/redhat-cop/openshift-virtualization-migration-ee`). AAP uses this image for job templates after seed.
 
 | Collection source
-| Git access to link:https://github.com/redhat-cop/openshift_virtualization_migration/tree/v2[openshift_virtualization_migration] branch `v2`, or Automation Hub once the validated collection matches that branch. See xref:source-collection.adoc[Sourcing the collection and execution environment].
+| Git access to link:https://github.com/redhat-cop/openshift_virtualization_migration[openshift_virtualization_migration], or Automation Hub. See xref:source-collection.adoc[Sourcing the collection and execution environment].
 |===
 
 Automation Hub is optional unless you pull extra certified collections.
 
-When this table is true, continue to xref:migration-factory-prerequisites.adoc[Migration Factory prerequisites] only if you still need laptop tools. If AAP will run every later template, you can skip the laptop packages after you can seed once.
+If you still need laptop tools to seed or to install AAP, see xref:migration-factory-prerequisites.adoc[Migration Factory prerequisites]. After a successful seed, later jobs run from AAP.

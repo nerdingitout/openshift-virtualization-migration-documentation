@@ -2,14 +2,14 @@
 
 Register the source hypervisor with MTV on the destination OpenShift cluster. Seed must already have succeeded (xref:seed-aap.adoc[Seeding Ansible Automation Platform]).
 
-When you are done, MTV shows a provider with a green check in the target's `mtv_namespace` (usually `openshift-mtv`). Next is xref:create-maps.adoc[Configure storage and network maps].
+When you are done, MTV shows a provider with a green check in the target's `mtv_namespace` (usually `openshift-mtv`).
 
-Run this from **AAP**. The template is **OpenShift Virtualization Migration - MTV Provider** (`vmf_mtv_provider` / `mtv_provider`). One source–target pair per launch. Internals: xref:roles:mtv_provider.adoc[mtv_provider].
+Run this from **AAP**. The template is **OpenShift Virtualization Migration - MTV Provider** (`vmf_mtv_provider` / `mtv_provider`). One source–target pair per launch. See xref:roles:mtv_provider.adoc[mtv_provider].
 
 == Prerequisites
 
 * Seed created the MTV Provider template.
-* Inventory matches collection v2 (xref:configure-inventory.adoc[Building your inventory]).
+* Inventory is complete (xref:configure-inventory.adoc[Building your inventory]).
 * Cluster is ready (xref:confirm-openshift-ready.adoc[OpenShift]).
 
 Survey extra vars:
@@ -53,4 +53,4 @@ For VMware with a VDDK image, confirm the VDDK secret exists in that namespace (
 
 == When you are done
 
-MTV has a provider for this source. Continue to xref:create-maps.adoc[Configure storage and network maps].
+MTV has a provider for this source.

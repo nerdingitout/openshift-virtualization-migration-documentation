@@ -2,7 +2,7 @@
 
 Tell Migration Factory where AAP, each source hypervisor, and each destination OpenShift cluster live. Seed reads this file and creates matching AAP hosts and credentials.
 
-Copy `inventory/inventory-sample.yml` from the link:https://github.com/redhat-cop/openshift_virtualization_migration/blob/v2/inventory/inventory-sample.yml[collection `v2` branch]. Do not edit the sample in place. Replace every `changeme`.
+Copy `inventory/inventory-sample.yml` from the link:https://github.com/redhat-cop/openshift_virtualization_migration/blob/v2/inventory/inventory-sample.yml[collection repository]. Do not edit the sample in place. Replace every `changeme`.
 
 Hosts are logical API targets. Playbooks use `connection: local`. After seed, AAP is the control plane; you do not re-run this file for each wave except when the topology changes (xref:scaling-the-automation.adoc[Updating the topology]).
 

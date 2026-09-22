@@ -8,4 +8,4 @@ Then:
 . xref:archive-plan.adoc[Archiving the plan] so the Plan CR cannot be started again and MTV can drop logs.
 . Leave maps and providers in place if another wave will use them. Remove them only when that pair is retired (xref:scaling-the-automation.adoc[Updating the topology]).
 
-Day-2 guest operations are not in collection `v2` yet. See xref:day2-overview.adoc[Day 2 operations].
+After handover, guest operations are in xref:day2-overview.adoc[Day 2 operations].

@@ -1,5 +1,5 @@
 name: v2
-title: Migration Factory V2
+title: Migration Factory
 version: ~
 nav:
   - modules/ROOT/nav.adoc

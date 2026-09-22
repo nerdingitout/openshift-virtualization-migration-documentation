@@ -1,1 +1,1 @@
-This name is not a role on the collection `v2` branch. The v2 roles are listed under xref:index.adoc[Automation reference].
+This role is not in the collection. The roles you can use are listed under xref:index.adoc[Automation reference].

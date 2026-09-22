@@ -1,10 +1,8 @@
 = Deploying Ansible Automation Platform
 
-Use this page when AAP is not installed yet. If you already have AAP, go to xref:setup-aap-yourself.adoc[Ansible Automation Platform] and skip the install.
+If AAP is not installed yet, install it on the OpenShift cluster you already have, then seed. If you already have AAP, go to xref:setup-aap-yourself.adoc[Ansible Automation Platform].
 
-Install AAP on the OpenShift cluster you already have, then seed. These docs do not install OpenShift.
-
-The collection `v2` playbook is `utility_aap_deploy` (`playbooks/utility_aap_deploy.yml`). It runs the `utility_aap_deploy` role against `migration_clusters`. It installs AAP; it does **not** seed Migration Factory. Internals: xref:roles:utility_aap_deploy.adoc[utility_aap_deploy].
+The playbook is `utility_aap_deploy` (`playbooks/utility_aap_deploy.yml`). It runs the `utility_aap_deploy` role against `migration_clusters`. It installs AAP; it does **not** seed Migration Factory. See xref:roles:utility_aap_deploy.adoc[utility_aap_deploy].
 
 You need an AAP entitlement (service account or subscription manifest). Pass the zip with `utility_aap_deploy_aap_license_manifest` when the operator requires it.
 
