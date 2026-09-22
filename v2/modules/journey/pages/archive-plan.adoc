@@ -1,8 +1,8 @@
-= Archive the plan
+= Archiving the plan
 
-Mark a finished migration plan archived in MTV so its logs and history go away and it cannot be started again. Verify first (xref:verify-migration.adoc[Verify the migration]). Do not archive a plan you still need to restart or debug.
+Mark a finished migration plan archived in MTV so its logs and history go away and it cannot be started again. Close the wave first (xref:close-migration-wave.adoc[Closing the migration wave]). Do not archive a plan you still need to restart or debug.
 
-When you are done, the plan is archived in the project where you created it. The migrated VMs stay in `target_namespace`. Next is xref:scaling-the-automation.adoc[Scale the automation].
+When you are done, the plan is archived. The migrated VMs stay in `target_namespace`. Next is xref:scaling-the-automation.adoc[Updating the topology] if you are adding sources or clusters.
 
 Collection `v2` has no archive playbook. Archive is an MTV action on the Plan CR that `mtv_plans` created. Use the OpenShift web console.
 
@@ -13,8 +13,8 @@ Collection `v2` has no archive playbook. Archive is an MTV action on the Plan CR
 Archiving does **not** delete:
 
 * Migrated VirtualMachines
-* StorageMaps or NetworkMaps from xref:create-maps.adoc[Create maps]
-* Providers from xref:create-providers.adoc[Create providers]
+* StorageMaps or NetworkMaps from xref:create-maps.adoc[Configure storage and network maps]
+* Providers from xref:create-providers.adoc[Configure providers]
 
 **Delete Plan** is a different action. It permanently removes the Plan CR. You cannot delete a running plan. MTV does not clean temporary importer or conversion resources on delete unless you archive first. Archive, then delete, if you want that cleanup.
 
@@ -43,7 +43,7 @@ image::guides:rhdp:openshift-mtv-plans.png[MTV Plans]
 If the project does not appear, select *Show default projects* so names that start with `openshift` are listed.
 ====
 
-To run a similar wave later: options menu → **Duplicate Plan**, then treat the copy as a new plan (xref:execute-migration.adoc[Execute the migration]). Do not expect the archived plan to start again.
+To run a similar wave later: options menu → **Duplicate Plan**, then treat the copy as a new plan (xref:execute-migration.adoc[Migrating VMs]). Do not expect the archived plan to start again.
 
 To remove the Plan CR after archive: options menu → **Delete Plan**. Only do this when you do not need the record. VMs are unchanged.
 
@@ -58,4 +58,4 @@ MTV plan options: link:https://docs.redhat.com/en/documentation/migration_toolki
 
 == When you are done
 
-The plan is archived (and optionally deleted). Workloads remain on OpenShift Virtualization. Continue to xref:scaling-the-automation.adoc[Scale the automation] if you are repeating this path across more sources or clusters.
+The plan is archived (and optionally deleted). Workloads remain on OpenShift Virtualization. Continue to xref:scaling-the-automation.adoc[Updating the topology] if you are repeating this path across more sources or clusters.

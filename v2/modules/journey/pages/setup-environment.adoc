@@ -1,11 +1,18 @@
-= Get AAP ready
+= Preparing your environment
 
-Have Ansible Automation Platform available. OpenShift is already there (see xref:confirm-openshift-ready.adoc[Confirm OpenShift is ready]). Choose how AAP will run. The rest of the site does not fork after that choice.
+Get OpenShift, Ansible Automation Platform, the collection, and the inventory in place before you seed. AAP is the place you run Migration Factory after that. Laptop CLI is only for these setup steps (and for deploying AAP if you do not already have it).
 
-include::page$_placeholder.adoc[]
+Work through the children in the left nav:
 
-The alternatives in this group:
+. xref:prerequisites.adoc[Prerequisites] — access and credentials.
+. xref:migration-factory-prerequisites.adoc[Migration Factory prerequisites] — local tools, only if you still need them.
+. xref:source-collection.adoc[Sourcing the collection and execution environment].
+. xref:confirm-openshift-ready.adoc[OpenShift] — Virtualization and MTV already installed.
+. xref:setup-aap-yourself.adoc[Ansible Automation Platform] — use the AAP you already run.
+. xref:configure-inventory.adoc[Building your inventory].
+. xref:setup-existing-ocp.adoc[Deploying Ansible Automation Platform (optional)] — only if AAP is not there yet.
+. xref:validate-environment.adoc[Validate your environment].
 
-* xref:setup-rhdp.adoc[Red Hat Demo Platform]
-* xref:setup-existing-ocp.adoc[Deploy AAP on your OpenShift]
-* xref:setup-aap-yourself.adoc[Use an AAP you already have]
+Then xref:seed-aap.adoc[Seeding Ansible Automation Platform].
+
+Red Hat Demo Platform is a demonstration lab, not this path. It lives under *Enablement* → xref:setup-rhdp.adoc[RHDP workshop].

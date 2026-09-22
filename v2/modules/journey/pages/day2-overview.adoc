@@ -1,0 +1,7 @@
+= Day 2 operations (future)
+
+This section is a placeholder. Collection `v2` documents the migration path (providers, maps, waves). Day-2 guest operations (patching, backup, networking at scale) are not on that branch.
+
+The Operations collection on Automation Hub is https://console.redhat.com/ansible/automation-hub/collections/validated/infra/openshift_virtualization_ops/details/[infra.openshift_virtualization_ops]. These pages will grow when that content is in the same journey.
+
+Until then, operate migrated VMs with OpenShift Virtualization and your existing AAP content. xref:day2-onboarding.adoc[Onboarding VMs] is the first planned topic.

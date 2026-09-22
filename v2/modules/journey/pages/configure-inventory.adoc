@@ -1,14 +1,10 @@
-= Configure inventory for your environment
+= Building your inventory
 
-Tell Migration Factory **where everything lives** so seed, providers, and maps talk to the right places: Ansible Automation Platform, the OpenShift cluster that already has OpenShift Virtualization and MTV, and the VMware or RHV source.
+Tell Migration Factory where AAP, each source hypervisor, and each destination OpenShift cluster live. Seed reads this file and creates matching AAP hosts and credentials.
 
-This is not an OpenShift install guide. Confirm the cluster is ready first (xref:confirm-openshift-ready.adoc[Confirm OpenShift is ready]). The type of OpenShift (single node, multi-node, and so on) does not change these steps.
+Copy `inventory/inventory-sample.yml` from the link:https://github.com/redhat-cop/openshift_virtualization_migration/blob/v2/inventory/inventory-sample.yml[collection `v2` branch]. Do not edit the sample in place. Replace every `changeme`.
 
-When you are done, you have **one inventory file** in the collection v2 layout. xref:seed-aap.adoc[Seed Migration Factory into AAP] uses that file. Do not seed until the inventory matches the environment.
-
-Copy `inventory/inventory-sample.yml` from the link:https://github.com/redhat-cop/openshift_virtualization_migration/blob/v2/inventory/inventory-sample.yml[collection `v2` branch]. Do not edit the sample in place. Values still set to `changeme` are the ones you must replace.
-
-Hosts in this file are logical (API targets). Playbooks run with `connection: local`.
+Hosts are logical API targets. Playbooks use `connection: local`. After seed, AAP is the control plane; you do not re-run this file for each wave except when the topology changes (xref:scaling-the-automation.adoc[Updating the topology]).
 
 == Groups
 
@@ -17,46 +13,21 @@ Hosts in this file are logical (API targets). Playbooks run with `connection: lo
 | Group | What it is for
 
 | `migration_aap`
-| The AAP controller you seed. Used when you run playbooks from your laptop. Inside AAP, the controller connection is already there. This group is **not** pushed into the AAP inventory.
+| The AAP controller seed talks to. Not copied into the AAP inventory.
 
 | `vm_sources`
-| Each source hypervisor (VMware vSphere or RHV). Seed turns these into AAP hosts plus **Migration Factory - Source Environment** credentials.
+| Each VMware vSphere or RHV environment. Seed creates AAP hosts plus **Migration Factory - Source Environment** credentials.
 
 | `migration_clusters`
-| Each destination OpenShift cluster. Seed turns these into AAP hosts plus **OpenShift or Kubernetes API Bearer Token** credentials. Each cluster lists which sources it can migrate.
+| Each destination OpenShift API. Seed creates AAP hosts plus **OpenShift or Kubernetes API Bearer Token** credentials. Each cluster lists the sources it may migrate.
 |===
 
-== Choose a layout
+== AAP controller
 
-Pick the layout that matches the hosts you already have.
+Username and password:
 
-=== One OpenShift cluster and one source
-
-Typical for a lab, including Red Hat Demo Platform.
-
-* One host under `migration_clusters` (the OpenShift API).
-* One host under `vm_sources` (vCenter or RHV).
-* On the cluster host, `vm_sources` lists that source host name.
-* `migration_aap` names the AAP you will seed (RHDP AAP, or AAP you just deployed).
-
-=== Several clusters or several sources
-
-* Add one `migration_clusters` host per destination OpenShift API.
-* Add one `vm_sources` host per vCenter or RHV.
-* On each cluster, `vm_sources` is the list of source host names that cluster may migrate.
-* `aap_hosts` on a cluster lists which `migration_aap` host seeds that cluster.
-
-== Fill in connections
-
-**AAP** (`migration_aap`): `aap_hostname` as a URL, and either username and password or `aap_token`. Set `aap_project_scm_branch: v2` if you pin the project to the v2 collection branch.
-
-**Sources** (`vm_sources`): `type` (`vmware` or `ovirt`), `host`, `username`, `password`, `sdk_endpoint` (`/sdk` for vSphere, `/ovirt-engine/api` for RHV). Optional VDDK image under `vddk.image` for VMware. VDDK is licensed VMware content; use an image **you** are entitled to build. Do not copy an internal test image into a customer environment.
-
-**OpenShift** (`migration_clusters`): `openshift_host` (API URL). Use **one** of `openshift_api_key` (service account token) or `openshift_temporary_api_key` (`oc login`). To mint a long-lived token, see xref:roles:utility_openshift_target_credential.adoc[utility_openshift_target_credential]. Optional: `mtv_namespace` (default `openshift-mtv`), `default_target_namespace`, `configure_mtv: true`.
-
-== Skeleton
-
-[,yaml]
+.migration_aap — password
+[source,yaml]
 ----
 migration_aap:
   hosts:
@@ -65,6 +36,136 @@ migration_aap:
       aap_username: admin
       aap_password: changeme
       aap_validate_certs: true
+      aap_project_scm_branch: v2
+----
+
+Token instead of a password:
+
+.migration_aap — token
+[source,yaml]
+----
+    aap-instance:
+      aap_hostname: https://aap.example.com
+      aap_token: changeme
+      aap_validate_certs: true
+      aap_project_scm_branch: v2
+----
+
+Private Git for the AAP project (HTTPS):
+
+.migration_aap — private repo
+[source,yaml]
+----
+      aap_project_scm_url: https://github.com/myorg/openshift_virtualization_migration.git
+      aap_project_scm_branch: v2
+      aap_project_credential: My Git Credential
+      aap_git_username: my-git-user
+      aap_git_password: changeme
+----
+
+Custom execution environment:
+
+.migration_aap — EE
+[source,yaml]
+----
+      aap_execution_environment: Migration Factory Execution Environment
+      aap_execution_environment_image: quay.io/redhat-cop/openshift-virtualization-migration-ee:latest
+      aap_execution_environment_pull: missing
+      aap_execution_environment_credential: Migration Factory Registry Credential
+      aap_execution_environment_host: quay.io
+      aap_execution_environment_username: changeme
+      aap_execution_environment_password: changeme
+----
+
+== Source hypervisors
+
+VMware:
+
+.vm_sources — vSphere
+[source,yaml]
+----
+vm_sources:
+  hosts:
+    vcenter-prod:
+      type: vmware
+      host: vcenter.example.com
+      sdk_endpoint: /sdk
+      username: administrator@vsphere.local
+      password: changeme
+----
+
+VMware with VDDK (use an image **you** are entitled to build):
+
+.vm_sources — VDDK
+[source,yaml]
+----
+    vcenter-prod:
+      type: vmware
+      host: vcenter.example.com
+      sdk_endpoint: /sdk
+      username: administrator@vsphere.local
+      password: changeme
+      vddk:
+        image: registry.example.com/vddk:8.0
+----
+
+RHV:
+
+.vm_sources — RHV
+[source,yaml]
+----
+    rhv-legacy:
+      type: ovirt
+      host: rhvm.example.com
+      sdk_endpoint: /ovirt-engine/api
+      username: admin@internal
+      password: changeme
+----
+
+== Destination clusters
+
+Service account token (preferred):
+
+.migration_clusters — API token
+[source,yaml]
+----
+migration_clusters:
+  hosts:
+    ocp-prod:
+      openshift_host: https://api.example.com:6443
+      openshift_api_key: changeme
+      vm_sources:
+        - vcenter-prod
+      aap_hosts:
+        - aap-instance
+      mtv_namespace: openshift-mtv
+      default_target_namespace: vm-workloads
+      configure_mtv: true
+----
+
+Short-lived `oc` token (labs only):
+
+.migration_clusters — temporary token
+[source,yaml]
+----
+      openshift_temporary_api_key: changeme
+----
+
+Do not set both `openshift_api_key` and `openshift_temporary_api_key`. To mint a long-lived token, see xref:roles:utility_openshift_target_credential.adoc[utility_openshift_target_credential].
+
+== Layouts
+
+One cluster, one source — three host names even if the URLs sit on the same lab:
+
+.layout — one pair
+[source,yaml]
+----
+migration_aap:
+  hosts:
+    aap-instance:
+      aap_hostname: https://aap.example.com
+      aap_username: admin
+      aap_password: changeme
       aap_project_scm_branch: v2
 
 vm_sources:
@@ -90,8 +191,41 @@ migration_clusters:
       configure_mtv: true
 ----
 
-All-in-one still uses **three groups** and **three host names**. The OpenShift API, vCenter, and AAP can be different URLs even when they sit on the same lab.
+One cluster, two sources — list both names under the cluster:
+
+.layout — two sources
+[source,yaml]
+----
+      vm_sources:
+        - vcenter-prod
+        - rhv-legacy
+----
+
+Two clusters — each cluster has its own `vm_sources` list and `aap_hosts`:
+
+.layout — two clusters
+[source,yaml]
+----
+migration_clusters:
+  hosts:
+    ocp-prod:
+      openshift_host: https://api.prod.example.com:6443
+      openshift_api_key: changeme
+      vm_sources:
+        - vcenter-prod
+      aap_hosts:
+        - aap-instance
+    ocp-staging:
+      openshift_host: https://api.staging.example.com:6443
+      openshift_api_key: changeme
+      vm_sources:
+        - vcenter-prod
+      aap_hosts:
+        - aap-instance
+----
+
+A source missing from a cluster's `vm_sources` list fails provider and maps for that pair.
 
 == When you are done
 
-Save the inventory. Next, xref:seed-aap.adoc[Seed Migration Factory into AAP]. If seed or maps fail because a host name is wrong, return here; `source_name` and `target_name` later must match these host names.
+Save the file. xref:validate-environment.adoc[Validate your environment], then xref:seed-aap.adoc[Seeding Ansible Automation Platform]. Later `source_name` and `target_name` on AAP surveys must match these host names.

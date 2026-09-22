@@ -1,12 +1,18 @@
-= Confirm OpenShift is ready
+= OpenShift
 
-Start from a cluster that already exists. These docs do not cover installing or deploying OpenShift. The type of OpenShift environment does not change the path.
+Start from a cluster that already exists. These docs do not install OpenShift. Cluster size (single node vs multi-node) does not change later steps.
 
-Assume OpenShift Container Platform is installed, with baseline components:
+The cluster must already have:
 
 * OpenShift Virtualization
 * Migration Toolkit for Virtualization (MTV)
 
-A prerequisites role will verify this baseline. If that check fails, fix the cluster before you get AAP ready or seed Migration Factory.
+In the OpenShift web console, *Operators* → *Installed Operators*. Confirm both operators are Succeeded in the namespaces your platform uses (often `openshift-cnv` and `openshift-mtv`).
 
-include::page$_placeholder.adoc[]
+*Migration* in the left nav should list Providers, Plans, StorageMaps, and NetworkMaps for virtualization.
+
+If those APIs are missing, install the operators before you seed. Collection `v2` does not ship a working prerequisites-role check on this path; do not wait for a playbook to fix a missing operator.
+
+You need API access that AAP can use: a long-lived token is better than `oc whoami -t`. Mint one with xref:roles:utility_openshift_target_credential.adoc[utility_openshift_target_credential] if you do not already have a service account token.
+
+Next: xref:setup-aap-yourself.adoc[Ansible Automation Platform].

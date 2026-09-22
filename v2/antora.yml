@@ -5,3 +5,4 @@ nav:
   - modules/ROOT/nav.adoc
   - modules/journey/nav.adoc
   - modules/roles/nav.adoc
+  - modules/support/nav.adoc

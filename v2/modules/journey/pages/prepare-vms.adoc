@@ -1,0 +1,13 @@
+= Preparing VMs for migration (optional)
+
+Collection `v2` has no playbook that prepares guests. Do this on the source before you define the wave, when the workload needs it.
+
+Typical checks (follow MTV and guest OS guidance):
+
+* VMware Tools or RHV guest agent where the provider requires them.
+* For **cold** plans, a maintenance window so VMs can power off.
+* For **warm** plans, you still need a later **Cutover** (xref:execute-migration.adoc[Migrating VMs]).
+* Names and folders you will put in `mtv_plans_migration_request` actually exist on the source.
+* Applications that cannot move with the VM (external load balancers, licenses tied to hardware) are handled outside this factory.
+
+Then xref:prepare-migration-wave.adoc[Defining a migration wave].

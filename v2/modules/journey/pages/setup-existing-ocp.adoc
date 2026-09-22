@@ -1,8 +1,12 @@
-= Deploy AAP on your OpenShift
+= Deploying Ansible Automation Platform (optional)
 
-Deploy Ansible Automation Platform onto the OpenShift cluster you already have, then add Migration Factory. These docs do not cover installing OpenShift.
+Skip this page if AAP already exists. Install AAP on the OpenShift cluster you already have, then seed. These docs do not install OpenShift.
 
-The collection v2 playbook is `utility_aap_deploy` (`playbooks/utility_aap_deploy.yml`). It runs the `utility_aap_deploy` role against `migration_clusters`. It installs AAP; it does **not** seed Migration Factory content. After AAP is up, put its API URL and credentials in `migration_aap` and continue to xref:configure-inventory.adoc[Configure inventory for your environment] and xref:seed-aap.adoc[Seed Migration Factory into AAP].
+The collection `v2` playbook is `utility_aap_deploy` (`playbooks/utility_aap_deploy.yml`). It runs the `utility_aap_deploy` role against `migration_clusters`. It installs AAP; it does **not** seed Migration Factory. Internals: xref:roles:utility_aap_deploy.adoc[utility_aap_deploy].
+
+You need an AAP entitlement (service account or subscription manifest). Pass the zip with `utility_aap_deploy_aap_license_manifest` when the operator requires it.
+
+This is one of the few remaining laptop CLI steps. From the directory that holds a minimal inventory (OpenShift API on `migration_clusters`):
 
 [,shell]
 ----
@@ -18,4 +22,4 @@ ansible-navigator run \
   -i <inventory>
 ----
 
-Pass an entitlement manifest with `utility_aap_deploy_aap_license_manifest` when the operator needs a subscription zip. Internals: xref:roles:utility_aap_deploy.adoc[utility_aap_deploy].
+Defaults include instance name `aap`, operator channel `stable-2.6`, and namespace `virtualization-migration`. After the instance is ready, copy its URL and admin password into `migration_aap` and continue xref:configure-inventory.adoc[Building your inventory] if you have not finished that file, then xref:validate-environment.adoc[Validate your environment].

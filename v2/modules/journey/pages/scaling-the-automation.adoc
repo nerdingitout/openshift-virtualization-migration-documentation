@@ -1,6 +1,6 @@
-= Scale the automation
+= Updating the topology
 
-Repeat the path you just finished for more sources, more OpenShift clusters, and larger waves. Use the same collection `v2` playbooks and AAP templates. This page is not a cluster autoscaler and not a new installer.
+Repeat the path you just finished for more sources, more OpenShift clusters, and larger waves. Launch the same AAP templates. This page is not a cluster autoscaler.
 
 When you are done, the inventory lists every hypervisor and destination you care about, AAP has those hosts, and you can run providers, maps, and waves per pair. There is no separate “scale” playbook on collection `v2`.
 
@@ -8,22 +8,22 @@ When you are done, the inventory lists every hypervisor and destination you care
 
 Collection `v2` scales by **more inventory hosts** and **more launches**, not by a workflow that fans out every pair for you.
 
-* Providers and maps: one launch per `source_name` + `target_name` (xref:create-providers.adoc[Create providers], xref:create-maps.adoc[Create maps]).
-* Waves: one `mtv_plans_migration_request` per sitting; `split_plans` if the VM list is large (xref:prepare-migration-wave.adoc[Prepare a migration wave]).
-* Start, verify, archive: each Plan CR (xref:execute-migration.adoc[Execute the migration]). The AAP **Migrate** template still does not move VMs.
+* Providers and maps: one AAP launch per `source_name` + `target_name` (xref:create-providers.adoc[Configure providers], xref:create-maps.adoc[Configure storage and network maps]).
+* Waves: one `mtv_plans_migration_request` per sitting; `split_plans` if the VM list is large (xref:prepare-migration-wave.adoc[Defining a migration wave]).
+* Start, verify, archive: each Plan CR (xref:execute-migration.adoc[Migrating VMs]). The AAP **Migrate** template still does not move VMs.
 
 == More sources or clusters
 
-Add hosts in the inventory (xref:configure-inventory.adoc[Configure inventory for your environment]). Copy from the link:https://github.com/redhat-cop/openshift_virtualization_migration/blob/v2/inventory/inventory-sample.yml[v2 inventory sample] (`ocp-staging` and extra `vm_sources` hosts are commented there).
+Add hosts in the inventory (xref:configure-inventory.adoc[Building your inventory]). Copy from the link:https://github.com/redhat-cop/openshift_virtualization_migration/blob/v2/inventory/inventory-sample.yml[v2 inventory sample] (`ocp-staging` and extra `vm_sources` hosts are commented there).
 
 * One `vm_sources` host per vCenter or RHV.
 * One `migration_clusters` host per OpenShift API.
 * On each cluster, `vm_sources` is the list of source host names that cluster may migrate. A source missing from that list fails provider and maps.
 * `aap_hosts` on a cluster names which `migration_aap` host seeds it.
 
-Then run xref:seed-aap.adoc[Seed Migration Factory into AAP] again (`vmf_seed_aap`) so AAP inventory and credentials match the file. Seed does not install AAP. Do not invent a second seed playbook.
+Then run xref:seed-aap.adoc[Seeding Ansible Automation Platform] again (`vmf_seed_aap`) so AAP inventory and credentials match the file. Seed does not install AAP.
 
-Each new pair still needs MTV **Ready** on that cluster (xref:confirm-openshift-ready.adoc[Confirm OpenShift is ready]) before providers.
+Each new pair still needs MTV **Ready** on that cluster (xref:confirm-openshift-ready.adoc[OpenShift]) before providers.
 
 == Limit the destination
 
@@ -31,8 +31,7 @@ Each new pair still needs MTV **Ready** on that cluster (xref:confirm-openshift-
 
 When the inventory has several clusters:
 
-* CLI: `--limit <openshift-host>` on `vmf_mtv_plans`.
-* AAP: set the job limit to that `migration_clusters` host.
+* On **OpenShift Virtualization Migration - MTV Plans**, set the job limit to the `migration_clusters` host.
 * Always pass `source_name` and `target_name` for provider and maps (AAP survey).
 
 == Larger waves
@@ -58,10 +57,10 @@ Per-VM Ansible during a plan is xref:roles:mtv_hook_invoke_aap.adoc[mtv_hook_inv
 
 * Source not in the cluster's `vm_sources` list — fix the inventory and seed again.
 * `source_name` / `target_name` do not match host names — same names as in the inventory file.
-* Plans hit every cluster — you omitted `--limit` / AAP limit on `vmf_mtv_plans`.
+* Plans hit every cluster — you omitted the AAP job limit on MTV Plans.
 * One huge plan saturates VDDK or storage — lower `vms_per_plan` and split.
-* New cluster has no MTV — xref:confirm-openshift-ready.adoc[Confirm OpenShift is ready] first.
+* New cluster has no MTV — xref:confirm-openshift-ready.adoc[OpenShift] first.
 
 == When you are done
 
-You can add the next pair or the next wave with the same templates. Argument lists for the `v2` roles start at xref:roles:index.adoc[Look up an Ansible role].
+You can add the next pair or the next wave with the same templates. Argument lists for the `v2` roles start at xref:roles:index.adoc[Automation reference].

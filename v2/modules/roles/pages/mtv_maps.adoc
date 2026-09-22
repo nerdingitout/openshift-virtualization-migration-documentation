@@ -1,6 +1,6 @@
 = mtv_maps
 
-Creates MTV/Forklift StorageMap and NetworkMap custom resources on the destination OpenShift cluster for one source–target pair. Used from xref:journey:create-maps.adoc[Create maps].
+Creates MTV/Forklift StorageMap and NetworkMap custom resources on the destination OpenShift cluster for one source–target pair. Used from xref:journey:create-maps.adoc[Configure storage and network maps].
 
 Playbook: `infra.openshift_virtualization_migration.vmf_mtv_maps` (`playbooks/vmf_mtv_maps.yml` on the collection `v2` branch). The playbook targets `migration_clusters` and runs only when `inventory_hostname` equals `target_name`.
 

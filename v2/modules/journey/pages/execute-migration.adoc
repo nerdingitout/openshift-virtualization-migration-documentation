@@ -1,8 +1,8 @@
-= Execute the migration
+= Migrating VMs
 
-Start the Plan custom resources from xref:prepare-migration-wave.adoc[Prepare a migration wave] so MTV copies the VMs to OpenShift.
+Start the Plan custom resources from xref:prepare-migration-wave.adoc[Defining a migration wave] so MTV copies the VMs to OpenShift.
 
-When you are done, the plan status is **Running**, then **Succeeded**. Next is xref:verify-migration.adoc[Verify the migration]. Creating a plan does not start it.
+When you are done, the plan status is **Running**, then **Succeeded**. Next is xref:verify-migration.adoc[Verifying a migration]. Creating a plan does not start it.
 
 Collection `v2` does **not** start migrations from Ansible. The seeded AAP template **OpenShift Virtualization Migration - Migrate** (`playbooks/vmf_migrate.yml`) is a placeholder: it prints `source_name` and `target_name` and exits. There is no `mtv_migrate` role on the `v2` branch. Do not launch that template expecting disks to move.
 
@@ -10,7 +10,7 @@ Start each Ready plan in the OpenShift web console (MTV). That is the path that 
 
 == Prerequisites
 
-* Plans for this wave exist and show **Ready** (xref:prepare-migration-wave.adoc[Prepare a migration wave]).
+* Plans for this wave exist and show **Ready** (xref:prepare-migration-wave.adoc[Defining a migration wave]).
 * You can open the destination cluster in the OpenShift web console with permission to use MTV (*Migration* menu).
 
 If a plan is not Ready, go back to the wave page. Do not start it.
@@ -47,13 +47,13 @@ Use that template only to confirm seed created it. Use the console steps above t
 
 == If the run does not start
 
-* Plan not **Ready** — maps, providers, or VM names; fix on xref:prepare-migration-wave.adoc[Prepare a migration wave].
+* Plan not **Ready** — maps, providers, or VM names; fix on xref:prepare-migration-wave.adoc[Defining a migration wave].
 * **Start** missing or disabled — the plan is already running, archived, or not Ready.
 * AAP **Migrate** job is green but nothing moves — expected for `vmf_migrate.yml` on collection `v2`.
 * Warm plan stays in precopy — **Start** did its job; use **Cutover** when you intend to switch.
 
 == When you are done
 
-The plan shows **Succeeded** (or is still **Running** while disks copy). Migrated VMs are typically powered off until you start them. Continue to xref:verify-migration.adoc[Verify the migration].
+The plan shows **Succeeded** (or is still **Running** while disks copy). Migrated VMs are typically powered off until you start them. Continue to xref:verify-migration.adoc[Verifying a migration].
 
 image::guides:rhdp:openshift-mtv-completed-plan.png[MTV plan succeeded]

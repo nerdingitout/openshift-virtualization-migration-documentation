@@ -1,0 +1,5 @@
+= Onboarding VMs
+
+Future page: how a migrated VM joins day-2 automation (inventory, credentials, operating system content). Not implemented on collection `v2`.
+
+Until this exists, treat onboarded VMs as ordinary OpenShift Virtualization workloads in `target_namespace`.
