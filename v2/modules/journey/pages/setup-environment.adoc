@@ -10,7 +10,7 @@ Work through the children in the left nav:
 . xref:confirm-openshift-ready.adoc[OpenShift] — Virtualization and MTV already installed.
 . xref:setup-aap-yourself.adoc[Ansible Automation Platform] — use the AAP you already run.
 . xref:configure-inventory.adoc[Building your inventory].
-. xref:setup-existing-ocp.adoc[Deploying Ansible Automation Platform (optional)] — only if AAP is not there yet.
+. xref:setup-existing-ocp.adoc[Deploying Ansible Automation Platform] — use this only if AAP is not installed yet.
 . xref:validate-environment.adoc[Validate your environment].
 
 Then xref:seed-aap.adoc[Seeding Ansible Automation Platform].

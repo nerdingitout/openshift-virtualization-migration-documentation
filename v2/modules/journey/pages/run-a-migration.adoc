@@ -7,7 +7,7 @@ Skip this page if AAP is already seeded and you know that sequence.
 . xref:create-providers.adoc[Configure providers] — source hypervisor on the destination cluster.
 . xref:create-maps.adoc[Configure storage and network maps].
 . xref:prepare-migration-wave.adoc[Defining a migration wave] — Plan CRs, not the copy itself.
-. xref:prepare-vms.adoc[Preparing VMs for migration (optional)].
+. xref:prepare-vms.adoc[Preparing VMs for migration] — guest-side checks when the workload needs them; skip if guests are already ready.
 . xref:execute-migration.adoc[Migrating VMs] — start the Ready plans.
 . xref:verify-migration.adoc[Verifying a migration] and xref:archive-plan.adoc[Archiving the plan].
 

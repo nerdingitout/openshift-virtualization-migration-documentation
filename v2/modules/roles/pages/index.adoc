@@ -25,7 +25,7 @@ These are the roles on the collection `v2` branch. After seed, you run them as A
 | From an MTV hook, launch an AAP job template.
 
 | xref:utility_aap_deploy.adoc[utility_aap_deploy]
-| Install AAP on OpenShift. Does not seed Migration Factory. Optional.
+| Install AAP on OpenShift. Does not seed Migration Factory. Use when AAP is not already installed.
 
 | xref:utility_openshift_target_credential.adoc[utility_openshift_target_credential]
 | Create a long-lived OpenShift service account token for AAP.

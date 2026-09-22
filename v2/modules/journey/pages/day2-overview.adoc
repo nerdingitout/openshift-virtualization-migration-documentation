@@ -1,4 +1,4 @@
-= Day 2 operations (future)
+= Day 2 operations
 
 This section is a placeholder. Collection `v2` documents the migration path (providers, maps, waves). Day-2 guest operations (patching, backup, networking at scale) are not on that branch.
 

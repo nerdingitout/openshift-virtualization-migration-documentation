@@ -13,6 +13,6 @@ Catalog item: https://catalog.demo.redhat.com/catalog?item=babylon-catalog-prod/
 
 image::guides:rhdp:rhdp-service-details.png[RHDP service details]
 
-Then follow the same mainstream path: optional xref:setup-existing-ocp.adoc[Deploying Ansible Automation Platform (optional)], xref:configure-inventory.adoc[Building your inventory] (one cluster, one source), xref:seed-aap.adoc[Seeding Ansible Automation Platform].
+Then follow the same path: xref:setup-existing-ocp.adoc[Deploying Ansible Automation Platform] if the lab has no AAP yet, xref:configure-inventory.adoc[Building your inventory] (one cluster, one source), xref:seed-aap.adoc[Seeding Ansible Automation Platform].
 
 The older workshop write-up remains at xref:guides:rhdp:rhdp.adoc[v1 RHDP workshop]. Do not use its `migration_factory_aap` playbook or hub/spoke inventory; collection `v2` does not use those.

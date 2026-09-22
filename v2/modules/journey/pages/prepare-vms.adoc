@@ -1,6 +1,6 @@
-= Preparing VMs for migration (optional)
+= Preparing VMs for migration
 
-Collection `v2` has no playbook that prepares guests. Do this on the source before you define the wave, when the workload needs it.
+Collection `v2` has no playbook that prepares guests. Use this page when the workload needs guest-side work before you define the wave. If guests are already ready, continue to xref:prepare-migration-wave.adoc[Defining a migration wave].
 
 Typical checks (follow MTV and guest OS guidance):
 

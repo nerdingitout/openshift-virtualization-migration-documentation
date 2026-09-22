@@ -13,7 +13,7 @@ Confirm you can reach every system Migration Factory talks to. You do not instal
 | VMware vSphere or RHV URL, username, and password. VDDK image only if you are entitled to build and use one.
 
 | Ansible Automation Platform
-| URL plus an admin token or username and password. If AAP is not installed, that is the optional xref:setup-existing-ocp.adoc[Deploying Ansible Automation Platform (optional)] step, which needs an AAP entitlement (service account or subscription manifest).
+| URL plus an admin token or username and password. If AAP is not installed, use xref:setup-existing-ocp.adoc[Deploying Ansible Automation Platform], which needs an AAP entitlement (service account or subscription manifest).
 
 | Execution environment
 | Pull access to the Migration Factory EE on Quay (`quay.io/redhat-cop/openshift-virtualization-migration-ee`). AAP uses this image for job templates after seed.

@@ -1,6 +1,6 @@
 = Migration Factory prerequisites
 
-Laptop tools for the few steps that still run outside AAP: first seed, and optional AAP install. After seed, use AAP job templates. Skip this page if someone else already seeded AAP for you.
+Laptop tools for the few steps that still run outside AAP: first seed, and AAP install when you do not already have AAP. After seed, use AAP job templates. If someone else already seeded AAP, you do not need this page.
 
 Supported on Linux and macOS. Examples below are RHEL 9.
 
@@ -28,7 +28,7 @@ podman login quay.io/redhat-cop
 
 Install `oc` from the link:https://access.redhat.com/downloads/content/290[OpenShift Container Platform downloads] page if you need it for xref:confirm-openshift-ready.adoc[OpenShift] checks or for `utility_aap_deploy`. You do not use `oc` to launch provider, maps, or plan jobs after seed.
 
-== Git clone (optional)
+== Git clone
 
 Clone only if you will run seed from a local inventory file:
 

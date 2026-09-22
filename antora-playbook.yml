@@ -1,6 +1,6 @@
 site:
   title: Ansible for OpenShift Virtualization Migration Documentation
-  start_page: guides::home.adoc
+  start_page: v2::index.adoc
 content:
   sources:
     - url: .
